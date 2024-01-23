@@ -25,6 +25,15 @@ export type newUserRegisters = {
   source?: string
 }
 
+export type getUsers = {
+  fromClientId: string,
+  from?: string,
+  to?: string,
+  resultCount?: number,
+  source?: string,
+  verified?:boolean
+}
+
 export type AuthValuesType = {
   loading: boolean
   logout: () => void
@@ -33,4 +42,5 @@ export type AuthValuesType = {
   setUser: (value: UserDataType | null) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void,
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
+  getUsers:(params: getUsers) => Promise<any>
 }
