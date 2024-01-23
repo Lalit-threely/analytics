@@ -11,7 +11,7 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
+import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType, newUserRegisters } from './types'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -20,7 +20,8 @@ const defaultProvider: AuthValuesType = {
   setUser: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
-  logout: () => Promise.resolve()
+  logout: () => Promise.resolve(),
+  getNewRegisteredUsers: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -100,14 +101,39 @@ const AuthProvider = ({ children }: Props) => {
     router.push('/login')
   }
 
+  const getNewRegisteredUsers = async (params: newUserRegisters) => {
+    try {
+      // Replace 'API_URL' with your actual API endpoint
+      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUserCountsInAPeriodController';
+  
+      // Making the POST request using Axios
+      const response = await axios.post(apiUrl, params );
+  
+      // Handling the response data
+      console.log('Response Data:', response.data);
+  
+      // You can return the response data or perform other actions based on your requirements
+      return response.data;
+    } catch (error) {
+      // Handling errors
+      console.error('Error making POST request:', error);
+  
+      // You can throw the error or handle it in another way based on your requirements
+      throw error;
+    }
+  };
+
   const values = {
     user,
     loading,
     setUser,
     setLoading,
     login: handleLogin,
-    logout: handleLogout
+    logout: handleLogout,
+    getNewRegisteredUsers
   }
+
+
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
 }
