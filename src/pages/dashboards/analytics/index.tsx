@@ -4,6 +4,8 @@ import Grid from '@mui/material/Grid'
 // ** Demo Component Imports
 import AnalyticsProject from 'src/views/dashboards/analytics/AnalyticsProject'
 import AnalyticsOrderVisits from 'src/views/dashboards/analytics/AnalyticsOrderVisits'
+import AnalyticsActiveUsers from 'src/views/dashboards/analytics/AnalyticsActiveUsers'
+import AnalyticsDroppedOffUsers from 'src/views/dashboards/analytics/AnlyticsDroppedOffUsers'
 import AnalyticsTotalEarning from 'src/views/dashboards/analytics/AnalyticsTotalEarning'
 import AnalyticsSourceVisits from 'src/views/dashboards/analytics/AnalyticsSourceVisits'
 import AnalyticsEarningReports from 'src/views/dashboards/analytics/AnalyticsEarningReports'
@@ -28,7 +30,10 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} sm={6} lg={6}>
             <AnalyticsOrderVisits />
           </Grid>
-          
+          <Grid item xs={12} sm={6} lg={6}>
+            <AnalyticsActiveUsers />
+          </Grid>
+
           {/* <Grid item xs={12} sm={6} lg={3}>
             <CardStatsWithAreaChart
               stats='97.5k'
@@ -59,6 +64,9 @@ const AnalyticsDashboard = () => {
           </Grid> */}
           <Grid item xs={12} lg={12}>
             <AnalyticsProject />
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <AnalyticsDroppedOffUsers />
           </Grid>
         </Grid>
       </KeenSliderWrapper>

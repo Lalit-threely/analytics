@@ -22,7 +22,8 @@ const defaultProvider: AuthValuesType = {
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
-  getUsers:() => Promise.resolve()
+  getUsers: () => Promise.resolve(),
+  getActiveUsers: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -105,46 +106,68 @@ const AuthProvider = ({ children }: Props) => {
   const getNewRegisteredUsers = async (params: newUserRegisters) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUserCountsInAPeriodController';
-  
+      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUserCountsInAPeriodController'
+
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params );
-      
+      const response = await axios.post(apiUrl, params)
+
       // Handling the response data
-      console.log('Response Data:', response.data);
-  
+      console.log('Response Data:', response.data)
+
       // You can return the response data or perform other actions based on your requirements
-      return response.data;
+      return response.data
     } catch (error) {
       // Handling errors
-      console.error('Error making POST request:', error);
-  
+      console.error('Error making POST request:', error)
+
       // You can throw the error or handle it in another way based on your requirements
       // throw error;
     }
-  };
+  }
 
   const getUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUsers';
-  
+      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUsers'
+
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params );
-      
+      const response = await axios.post(apiUrl, params)
+
       // Handling the response data
-      console.log('Response Data:', response.data);
-  
+      console.log('Response Data:', response.data)
+
       // You can return the response data or perform other actions based on your requirements
-      return response.data;
+      return response.data
     } catch (error) {
       // Handling errors
-      console.error('Error making POST request:', error);
-  
+      console.error('Error making POST request:', error)
+
       // You can throw the error or handle it in another way based on your requirements
-      throw error;
+      throw error
     }
-  };
+  }
+
+  const getActiveUsers = async (params: getUsers) => {
+    try {
+      // Replace 'API_URL' with your actual API endpoint
+      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getActiveUsersCount'
+
+      // Making the POST request using Axios
+      const response = await axios.post(apiUrl, params)
+
+      // Handling the response data
+      console.log('Response Data:', response.data)
+
+      // You can return the response data or perform other actions based on your requirements
+      return response.data
+    } catch (error) {
+      // Handling errors
+      console.error('Error making POST request:', error)
+
+      // You can throw the error or handle it in another way based on your requirements
+      throw error
+    }
+  }
 
   const values = {
     user,
@@ -154,10 +177,9 @@ const AuthProvider = ({ children }: Props) => {
     login: handleLogin,
     logout: handleLogout,
     getNewRegisteredUsers,
-    getUsers
+    getUsers,
+    getActiveUsers
   }
-
-
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
 }

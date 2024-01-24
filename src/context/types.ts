@@ -17,21 +17,22 @@ export type UserDataType = {
 }
 
 export type newUserRegisters = {
-  rangeType: string,
-  fromClientId: string,
-  from?: string,
-  to?: string,
-  resultCount?: number,
+  rangeType: string
+  fromClientId: string
+  from?: string
+  to?: string
+  resultCount?: number
   source?: string
 }
 
 export type getUsers = {
-  fromClientId: string,
-  from?: string,
-  to?: string,
-  resultCount?: number,
-  source?: string,
-  verified?:boolean
+  fromClientId: string
+  from?: string
+  to?: string
+  resultCount?: number
+  source?: string
+  verified?: boolean
+  rangeType?: string
 }
 
 export type AuthValuesType = {
@@ -40,7 +41,8 @@ export type AuthValuesType = {
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void,
+  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
-  getUsers:(params: getUsers) => Promise<any>
+  getUsers: (params: getUsers) => Promise<any>
+  getActiveUsers: (params: getUsers) => Promise<any>
 }

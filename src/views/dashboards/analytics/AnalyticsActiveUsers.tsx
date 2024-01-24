@@ -7,26 +7,25 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import CardHeader from '@mui/material/CardHeader'
 import { useAuth } from 'src/hooks/useAuth'
 
-const AnalyticsOrderVisits = () => {
+const AnalyticsActiveUsers = () => {
   const auth = useAuth()
 
   const [defaultFilter, setDefaultFilter] = useState<string>('Daily')
   const [userCount, setUserCount] = useState<any>(null) // Use the appropriate type for your API response
   const [loading, setLoading] = useState(false)
-  const [percentageChange, setPercentageChange] = useState<any>(null)
 
   const fetchData = async (filter: string) => {
     setLoading(true)
 
     try {
-      const response = await auth.getNewRegisteredUsers({
+      const response = await auth.getActiveUsers({
         rangeType: filter,
 
         // "fromClientId": "7db16867-55c4-4abf-90d9-0f523e29b7c3",
         fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108',
-        resultCount: 2
+        resultCount: 1,
+        verified: true
       })
-      calculatePercentageChange(response.data[0].count, response.data[1].count)
       setUserCount(response.data[0].count)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -45,22 +44,12 @@ const AnalyticsOrderVisits = () => {
     fetchData(option)
   }
 
-  function calculatePercentageChange(currentValue: any, previousValue: any) {
-    if (currentValue === 0 && previousValue === 0) {
-      return 0
-    }
-    const difference = currentValue - previousValue
-    const absPreviousValue = Math.abs(previousValue) || 1
-    const percentageChange = (difference / absPreviousValue) * 100
-    setPercentageChange(percentageChange)
-  }
-
   return (
     <Card>
       <CardHeader
         sx={{ pb: 0 }}
-        title='Registered Users'
-        subheader={`${defaultFilter} Registered Users Overview`}
+        title='Active Users'
+        subheader={`${defaultFilter} Active Users Overview`}
         action={
           <OptionsMenu
             options={[
@@ -106,17 +95,10 @@ const AnalyticsOrderVisits = () => {
           <div>
             <Typography variant='h4'>{userCount ?? 'Loading...'}</Typography>
           </div>
-          <Typography sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
-            {loading
-              ? 'Loading...'
-              : percentageChange == null || percentageChange == 0
-              ? 'N/A'
-              : `${percentageChange.toFixed(2)}%`}
-          </Typography>
         </Box>
       </CardContent>
     </Card>
   )
 }
 
-export default AnalyticsOrderVisits
+export default AnalyticsActiveUsers
