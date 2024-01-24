@@ -19,8 +19,33 @@ import CardStatsVertical from 'src/@core/components/card-statistics/card-stats-v
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import CardStatsWithAreaChart from 'src/@core/components/card-statistics/card-stats-with-area-chart'
+import { useEffect, useState } from 'react'
+import { useAuth } from 'src/hooks/useAuth'
+
+type userData={ registered_users: number, verified_users: number, non_verified_users: number }
 
 const AnalyticsDashboard = () => {
+  const [userData, setUserData] = useState<userData>({})  
+  const auth = useAuth()
+
+  const fetchData = async () => {
+    // setLoading(true)
+
+    try {
+      const response = await auth.getRegisteredOrVerifiedCount({
+        fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108'
+      })
+      console.log("response",response);
+      setUserData(response)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
   return (
     <ApexChartWrapper>
       <KeenSliderWrapper>
@@ -34,20 +59,20 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} sm={6} lg={6}>
             <AnalyticsActiveUsers />
           </Grid>
-          <Grid container spacing={4} justifyContent="space-around" style={{ marginTop: 0 }}>
-            <Grid item xs={4} sm={4}  >
-            <CardStatsVertical
-            stats='24.67k'
-            avatarColor='info'
-            chipColor='default' 
-            title='Total Registered Users'
-            subtitle='Completed registration'
-            avatarIcon='tabler:users'
-          />
-            </Grid>
-            <Grid item xs={6} sm={3} >
+          <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
+            <Grid item xs={4} sm={4}>
               <CardStatsVertical
-                stats='1.28k'
+                stats={userData?.registered_users}
+                avatarColor='info'
+                chipColor='default'
+                title='Total Registered Users'
+                subtitle='Completed registration'
+                avatarIcon='tabler:users'
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <CardStatsVertical
+                stats={userData?.verified_users}
                 chipColor='info'
                 avatarColor='info'
                 title='Total Verified Users'
@@ -57,7 +82,7 @@ const AnalyticsDashboard = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <CardStatsVertical
-                stats='1.28k'
+                stats={userData?.non_verified_users}
                 chipColor='info'
                 avatarColor='error'
                 title='total dropped Off Users'

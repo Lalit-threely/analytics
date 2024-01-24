@@ -45,4 +45,5 @@ export type AuthValuesType = {
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
   getUsers: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>
+  getRegisteredOrVerifiedCount: (params: getUsers) => Promise<any>
 }

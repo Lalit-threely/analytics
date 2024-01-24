@@ -23,7 +23,8 @@ const defaultProvider: AuthValuesType = {
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
   getUsers: () => Promise.resolve(),
-  getActiveUsers: () => Promise.resolve()
+  getActiveUsers: () => Promise.resolve(),
+  getRegisteredOrVerifiedCount:() => Promise.resolve(),
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -169,6 +170,28 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
+  const getRegisteredOrVerifiedCount = async (params: getUsers) => {  
+    try {
+      // Replace 'API_URL' with your actual API endpoint
+      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getRegisteredOrVerifiedCount'
+
+      // Making the POST request using Axios
+      const response = await axios.post(apiUrl, params)
+
+      // Handling the response data
+      console.log('Response Data:', response.data)
+
+      // You can return the response data or perform other actions based on your requirements
+      return response.data.data
+    } catch (error) {
+      // Handling errors
+      console.error('Error making POST request:', error)
+
+      // You can throw the error or handle it in another way based on your requirements
+      throw error
+    }
+  }
+
   const values = {
     user,
     loading,
@@ -178,7 +201,8 @@ const AuthProvider = ({ children }: Props) => {
     logout: handleLogout,
     getNewRegisteredUsers,
     getUsers,
-    getActiveUsers
+    getActiveUsers,
+    getRegisteredOrVerifiedCount
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
