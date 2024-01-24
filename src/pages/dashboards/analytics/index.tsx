@@ -13,6 +13,7 @@ import AnalyticsSupportTracker from 'src/views/dashboards/analytics/AnalyticsSup
 import AnalyticsSalesByCountries from 'src/views/dashboards/analytics/AnalyticsSalesByCountries'
 import AnalyticsMonthlyCampaignState from 'src/views/dashboards/analytics/AnalyticsMonthlyCampaignState'
 import AnalyticsWebsiteAnalyticsSlider from 'src/views/dashboards/analytics/AnalyticsWebsiteAnalyticsSlider'
+import CardStatsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
 
 // ** Custom Component Import
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
@@ -33,7 +34,38 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} sm={6} lg={6}>
             <AnalyticsActiveUsers />
           </Grid>
-
+          <Grid container spacing={4} justifyContent="space-around" style={{ marginTop: 0 }}>
+            <Grid item xs={4} sm={4}  >
+            <CardStatsVertical
+            stats='24.67k'
+            avatarColor='info'
+            chipColor='default' 
+            title='Total Registered Users'
+            subtitle='Completed registration'
+            avatarIcon='tabler:users'
+          />
+            </Grid>
+            <Grid item xs={6} sm={3} >
+              <CardStatsVertical
+                stats='1.28k'
+                chipColor='info'
+                avatarColor='info'
+                title='Total Verified Users'
+                subtitle='Created trial username & verified'
+                avatarIcon='tabler:chart-bar'
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <CardStatsVertical
+                stats='1.28k'
+                chipColor='info'
+                avatarColor='error'
+                title='total dropped Off Users'
+                subtitle='Dropped before creating username'
+                avatarIcon='tabler:chart-bar'
+              />
+            </Grid>
+          </Grid>
           {/* <Grid item xs={12} sm={6} lg={3}>
             <CardStatsWithAreaChart
               stats='97.5k'

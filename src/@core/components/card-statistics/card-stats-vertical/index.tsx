@@ -47,14 +47,14 @@ const CardStatsVertical = (props: CardStatsVerticalProps) => {
           {subtitle}
         </Typography>
         <Typography sx={{ mb: 3.5, color: 'text.secondary' }}>{stats}</Typography>
-        <RenderChip
+        {chipText && <RenderChip
           size='small'
           label={chipText}
           color={chipColor}
           {...(chipColor === 'default'
             ? { sx: { borderRadius: '4px', color: 'text.secondary' } }
             : { rounded: true, skin: 'light' })}
-        />
+        />}
       </CardContent>
     </Card>
   )

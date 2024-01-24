@@ -84,29 +84,16 @@ const columns: GridColDef[] = [
     headerName: 'Source',
     renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.platform}</Typography>
   },
-  {
-    flex: 0.1,
-    minWidth: 105,
-    field: 'triaName',
-    headerName: 'Tria Name',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.triaName}</Typography>
-  },
-  {
-    flex: 0.1,
-    minWidth: 105,
-    field: 'loginCount',
-    headerName: 'Login Count',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.secondary' }}>{row.loginCount + 1}</Typography>
-  },
-  {
-    flex: 0.1,
-    minWidth: 105,
-    field: 'lastLoginTime',
-    headerName: 'Last Login',
-    renderCell: ({ row }: CellType) => (
-      <Typography sx={{ color: 'text.primary' }}>{row.lastLoginTime.split('T')[0]}</Typography>
-    )
-  },
+  
+  // {
+  //   flex: 0.1,
+  //   minWidth: 105,
+  //   field: 'lastLoginTime',
+  //   headerName: 'Last Login',
+  //   renderCell: ({ row }: CellType) => (
+  //     <Typography sx={{ color: 'text.primary' }}>{row.lastLoginTime.split('T')[0]}</Typography>
+  //   )
+  // },
   {
     flex: 0.1,
     minWidth: 105,
