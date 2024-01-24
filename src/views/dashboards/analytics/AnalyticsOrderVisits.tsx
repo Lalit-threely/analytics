@@ -40,18 +40,21 @@ const AnalyticsOrderVisits = () => {
   }, [defaultFilter])
 
   const handleOptionSelect = (option: string) => {
-    console.log(option, 'dddddd')
-    setDefaultFilter(option)
-    fetchData(option)
-  }
+    console.log(option, "dddddd")
+
+    // setDefaultFilter(option);
+    fetchData(option);
+  };
 
   function calculatePercentageChange(currentValue: any, previousValue: any) {
     if (currentValue === 0 && previousValue === 0) {
-      return 0
-    }
-    const difference = currentValue - previousValue
-    const absPreviousValue = Math.abs(previousValue) || 1
-    const percentageChange = (difference / absPreviousValue) * 100
+      setPercentageChange(0);
+      
+      // return 0;
+  }
+    let difference = currentValue - previousValue;
+    let absPreviousValue = Math.abs(previousValue) || 1
+    let percentageChange = (difference / absPreviousValue) * 100
     setPercentageChange(percentageChange)
   }
 
