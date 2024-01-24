@@ -22,10 +22,11 @@ import CardStatsWithAreaChart from 'src/@core/components/card-statistics/card-st
 import { useEffect, useState } from 'react'
 import { useAuth } from 'src/hooks/useAuth'
 
-type userData={ registered_users: number, verified_users: number, non_verified_users: number }
+type userData = { registered_users: number; verified_users: number; non_verified_users: number }
+import AnalyticsRegisteredUsersChart from 'src/views/dashboards/analytics/AnalyticsRegisteredUsersChart'
 
 const AnalyticsDashboard = () => {
-  const [userData, setUserData] = useState<userData>({})  
+  const [userData, setUserData] = useState<userData>({})
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -35,7 +36,7 @@ const AnalyticsDashboard = () => {
       const response = await auth.getRegisteredOrVerifiedCount({
         fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108'
       })
-      console.log("response",response);
+      console.log('response', response)
       setUserData(response)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -91,6 +92,10 @@ const AnalyticsDashboard = () => {
               />
             </Grid>
           </Grid>
+          <Grid item xs={12} lg={12}>
+            <AnalyticsRegisteredUsersChart />
+          </Grid>
+
           {/* <Grid item xs={12} sm={6} lg={3}>
             <CardStatsWithAreaChart
               stats='97.5k'
