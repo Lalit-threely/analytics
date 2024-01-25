@@ -86,7 +86,7 @@ const AnalyticsDashboard = () => {
                 stats={userData?.non_verified_users}
                 chipColor='info'
                 avatarColor='error'
-                title='total dropped Off Users'
+                title='Total dropped Off Users'
                 subtitle='Dropped before creating username'
                 avatarIcon='tabler:chart-bar'
               />

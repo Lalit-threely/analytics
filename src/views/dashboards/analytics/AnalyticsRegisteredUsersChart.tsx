@@ -1,31 +1,78 @@
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import { useState, MouseEvent, useEffect } from 'react'
-import format from 'date-fns/format'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { useAuth } from 'src/hooks/useAuth'
+import { useTheme } from '@mui/material/styles'
+import { useState, MouseEvent, useEffect } from 'react'
+import format from 'date-fns/format'
+import { CircularProgress, Box } from '@mui/material'
 
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
-import { CircularProgress } from '@mui/material'
+import { useAuth } from 'src/hooks/useAuth'
 
 const AnalyticsRegisteredUsersChart = () => {
   const auth = useAuth()
+  const theme = useTheme()
 
   const [filter, setFilter] = useState<string | null>('Daily')
+  const [categories, setCategories] = useState<Array<string>>([])
   const [loading, setLoading] = useState(false)
-  const [options, setOptions] = useState<ApexOptions>({
-    // ... (other options)
+
+  const options: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      zoom: { enabled: false },
+      toolbar: { show: false }
+    },
+    colors: ['#ff9f43'],
+    stroke: { curve: 'straight' },
+    dataLabels: { enabled: false },
+    markers: {
+      strokeWidth: 7,
+      strokeOpacity: 1,
+      colors: ['#ff9f43'],
+      strokeColors: ['#fff']
+    },
+    grid: {
+      padding: { top: -10 },
+      borderColor: theme.palette.divider,
+      xaxis: {
+        lines: { show: true }
+      }
+    },
+    tooltip: {
+      custom(data: any) {
+        return `<div class='bar-chart'>
+              <span>Users: ${data.series[data.seriesIndex][data.dataPointIndex]}</span>
+              </div>`
+      }
+    },
+    yaxis: {
+      labels: {
+        style: { colors: theme.palette.text.disabled },
+        formatter: function (val) {
+          return val.toFixed(0)
+        }
+      }
+    },
     xaxis: {
-      // ... (other xaxis options)
-      categories: []
+      axisBorder: { show: false },
+      axisTicks: { color: theme.palette.divider },
+      crosshairs: {
+        stroke: { color: theme.palette.divider }
+      },
+      labels: {
+        style: { colors: theme.palette.text.disabled }
+      },
+      categories: categories
     }
-  })
+  }
+
   const [series, setSeries] = useState([
     {
       data: []
@@ -46,24 +93,32 @@ const AnalyticsRegisteredUsersChart = () => {
         resultCount: 10
       })
 
-      console.log(response, 'dsssssss')
-
       if (response.success) {
         let xCategories = []
         const data = response.data
 
-        // Extracting 'from' values for x-axis categories
-        data.sort((a, b) => new Date(a.from).getTime() - new Date(b.from).getTime())
+        const sortedData = data.sort((a, b) => new Date(a.from) - new Date(b.from))
 
         if (filter === 'Daily') {
-          xCategories = data.map(item => {
+          xCategories = sortedData.map(item => {
             const formattedDate = format(new Date(item.from), 'dd-MM-yyyy')
 
             return formattedDate
           })
         }
+        if (filter === 'Weekly') {
+          xCategories = sortedData.map(entry => {
+            const fromDate = new Date(entry.from)
+            const toDate = new Date(entry.to)
+            const formattedRange = `${fromDate.getDate()}${fromDate.toLocaleDateString('en', {
+              month: 'short'
+            })}-${toDate.getDate()}${toDate.toLocaleDateString('en', { month: 'short' })}`
+
+            return formattedRange
+          })
+        }
         if (filter === 'Monthly') {
-          xCategories = data.map(item => {
+          xCategories = sortedData.map(item => {
             const formattedMonth = format(new Date(item.from), 'MMM')
 
             return formattedMonth
@@ -71,44 +126,16 @@ const AnalyticsRegisteredUsersChart = () => {
         }
 
         if (filter === 'Yearly') {
-          console.log('dkjdkdkdkdkdk')
-          xCategories = data.map(item => {
+          xCategories = sortedData.map(item => {
             const formattedMonth = format(new Date(item.from), 'yyyy')
 
             return formattedMonth
           })
         }
 
-        // Extracting 'count' values for series data
-        const seriesData = data.map(item => item.count)
+        const seriesData = sortedData.map(item => item.count)
 
-        // Update the xaxis categories and series
-        setOptions(prevOptions => ({
-          ...prevOptions,
-          xaxis: {
-            ...prevOptions.xaxis,
-            categories: xCategories
-          },
-          tooltip: {
-            custom(data: any) {
-              return `<div class='bar-chart'>
-              <span>Users: ${data.series[data.seriesIndex][data.dataPointIndex]}</span>
-              </div>`
-            }
-          },
-          yaxis: [
-            {
-              labels: {
-                formatter: function (val) {
-                  return val.toFixed(0)
-                }
-              }
-            }
-          ],
-          title: {
-            text: 'Users'
-          }
-        }))
+        setCategories(xCategories)
 
         setSeries([
           {
@@ -141,6 +168,7 @@ const AnalyticsRegisteredUsersChart = () => {
         action={
           <ToggleButtonGroup exclusive value={filter} onChange={handleActive}>
             <ToggleButton value='Daily'>Daily</ToggleButton>
+            <ToggleButton value='Weekly'>Weekly</ToggleButton>
             <ToggleButton value='Monthly'>Monthly</ToggleButton>
             <ToggleButton value='Yearly'>Yearly</ToggleButton>
           </ToggleButtonGroup>
@@ -148,16 +176,16 @@ const AnalyticsRegisteredUsersChart = () => {
       />
 
       {loading ? (
-        <div
-          style={{
+        <Box
+          sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '350px' // Adjust the height based on your layout
+            height: '350px'
           }}
         >
-          <CircularProgress color='success' size={60} /> {/* Adjust the size as needed */}
-        </div>
+          <CircularProgress color='success' size={60} />
+        </Box>
       ) : (
         <ReactApexcharts type='line' height={400} options={options} series={series} />
       )}
