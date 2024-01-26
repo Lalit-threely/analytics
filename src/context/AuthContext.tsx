@@ -73,15 +73,16 @@ const AuthProvider = ({ children }: Props) => {
       // } else {
       //   setLoading(false)
       // }
-      setUser({
-        id: 1,
-        role: "",
-        email: "",
-        fullName: "",
-        username: "",
-        password: "",
-      });
-      // router.replace('/dashboards/analytics/');
+      // setUser({
+      //   id: 1,
+      //   role: "",
+      //   email: "",
+      //   fullName: "",
+      //   username: "",
+      //   password: "",
+      // });
+      setLoading(false)
+      router.replace('/dashboards/analytics/');
     }
 
     initAuth()
