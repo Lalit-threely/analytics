@@ -243,7 +243,7 @@ const AnalyticsProject = () => {
       <CardHeader
         title='Projects'
         titleTypographyProps={{ sx: { mb: [2, 0] } }}
-        action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
+        // action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
         sx={{
           py: 4,
           flexDirection: ['column', 'row'],

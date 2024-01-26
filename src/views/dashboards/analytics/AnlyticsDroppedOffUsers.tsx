@@ -84,7 +84,7 @@ const columns: GridColDef[] = [
     headerName: 'Source',
     renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.platform}</Typography>
   },
-  
+
   // {
   //   flex: 0.1,
   //   minWidth: 105,
@@ -147,7 +147,7 @@ const AnalyticsDroppedOffUsers = () => {
       <CardHeader
         title='Dropped Off Users'
         titleTypographyProps={{ sx: { mb: [2, 0] } }}
-        action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
+        // action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
         sx={{
           py: 4,
           flexDirection: ['column', 'row'],
