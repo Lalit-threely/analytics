@@ -39,7 +39,7 @@ export type CardStatsWithAreaChartProps = {
 export type CardStatsVerticalProps = {
   stats: string
   title: string
-  chipText: string
+  chipText?: string
   subtitle: string
   avatarIcon: string
   sx?: SxProps<Theme>

@@ -26,7 +26,7 @@ type userData = { registered_users: number; verified_users: number; non_verified
 import AnalyticsRegisteredUsersChart from 'src/views/dashboards/analytics/AnalyticsRegisteredUsersChart'
 
 const AnalyticsDashboard = () => {
-  const [userData, setUserData] = useState<userData>({})
+  const [userData, setUserData] = useState<userData>()
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -63,7 +63,7 @@ const AnalyticsDashboard = () => {
           <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
             <Grid item xs={4} sm={4}>
               <CardStatsVertical
-                stats={userData?.registered_users}
+                stats={userData?.registered_users.toString()|| ""}
                 avatarColor='info'
                 chipColor='default'
                 title='Total Registered Users'
@@ -73,7 +73,7 @@ const AnalyticsDashboard = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <CardStatsVertical
-                stats={userData?.verified_users}
+                stats={userData?.verified_users.toString()|| ""}
                 chipColor='info'
                 avatarColor='info'
                 title='Total Verified Users'
@@ -83,7 +83,7 @@ const AnalyticsDashboard = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <CardStatsVertical
-                stats={userData?.non_verified_users}
+                stats={userData?.non_verified_users.toString()|| ""}
                 chipColor='info'
                 avatarColor='error'
                 title='Total dropped Off Users'
