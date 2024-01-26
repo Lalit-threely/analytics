@@ -74,7 +74,7 @@ const columns: GridColDef[] = [
     field: 'contactInformation',
     headerName: 'Contact Info',
     renderCell: ({ row }: CellType) => (
-      <Typography sx={{ color: 'text.secondary' }}>{row.contactInformation}</Typography>
+      <Typography sx={{ color: 'text.secondary' }}>{row?.contactInformation}</Typography>
     )
   },
   {
@@ -100,7 +100,7 @@ const columns: GridColDef[] = [
     field: 'createdAt',
     headerName: 'Account Created At',
     renderCell: ({ row }: CellType) => (
-      <Typography sx={{ color: 'text.primary' }}>{row.createdAt.split('T')[0]}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{row.createdAt && row.createdAt.split('T')[0]}</Typography>
     )
   }
 ]
@@ -140,7 +140,7 @@ const AnalyticsDroppedOffUsers = () => {
     setValue(val)
   }
 
-  const getRowId = row => row.uuid
+  const getRowId = (row:any) => row.uuid
 
   return data ? (
     <Card>

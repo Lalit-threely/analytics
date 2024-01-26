@@ -29,9 +29,9 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { useAuth } from 'src/hooks/useAuth'
 
-interface CellType {
-  row: ProjectTableRowType
-}
+// interface CellType {
+//   row: ProjectTableRowType
+// }
 
 // ** renders name column
 const renderName = (row: ProjectTableRowType) => {
@@ -56,7 +56,7 @@ const columns: GridColDef[] = [
     field: 'name',
     minWidth: 180,
     headerName: 'Name',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       const { name, date } = row
 
       return (
@@ -80,7 +80,7 @@ const columns: GridColDef[] = [
     minWidth: 250,
     field: 'contactInformation',
     headerName: 'Contact Info',
-    renderCell: ({ row }: CellType) => (
+    renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.secondary' }}>{row.contactInformation}</Typography>
     )
   },
@@ -89,28 +89,28 @@ const columns: GridColDef[] = [
     minWidth: 105,
     field: 'platform',
     headerName: 'Source',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.platform}</Typography>
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row.platform}</Typography>
   },
   {
     flex: 0.1,
     minWidth: 105,
     field: 'triaName',
     headerName: 'Tria Name',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.triaName}</Typography>
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row.triaName}</Typography>
   },
   {
     flex: 0.1,
     minWidth: 105,
     field: 'loginCount',
     headerName: 'Login Count',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.secondary' }}>{row.loginCount + 1}</Typography>
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.loginCount + 1}</Typography>
   },
   {
     flex: 0.1,
     minWidth: 105,
     field: 'lastLoginTime',
     headerName: 'Last Login',
-    renderCell: ({ row }: CellType) => (
+    renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.primary' }}>{row.lastLoginTime.split('T')[0]}</Typography>
     )
   },
@@ -119,7 +119,7 @@ const columns: GridColDef[] = [
     minWidth: 105,
     field: 'createdAt',
     headerName: 'Account Created At',
-    renderCell: ({ row }: CellType) => (
+    renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.primary' }}>{row.createdAt.split('T')[0]}</Typography>
     )
   }
@@ -130,7 +130,7 @@ const columns: GridColDef[] = [
   //   minWidth: 120,
   //   sortable: false,
   //   headerName: 'Team',
-  //   renderCell: ({ row }: CellType) => (
+  //   renderCell: ({ row }) => (
   //     <AvatarGroup className='pull-up'>
   //       {row.avatarGroup.map((src, index) => (
   //         <CustomAvatar key={index} src={src} sx={{ height: 26, width: 26 }} />
@@ -143,7 +143,7 @@ const columns: GridColDef[] = [
   //   minWidth: 150,
   //   field: 'status',
   //   headerName: 'Status',
-  //   renderCell: ({ row }: CellType) => (
+  //   renderCell: ({ row }) => (
   //     <>
   //       <LinearProgress
   //         color='primary'
@@ -236,7 +236,7 @@ const AnalyticsProject = () => {
     setValue(val)
   }
 
-  const getRowId = row => row.uuid
+  const getRowId = (row:any) => row.uuid
 
   return data ? (
     <Card>

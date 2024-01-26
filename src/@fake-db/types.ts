@@ -60,6 +60,9 @@ export type ProjectTableRowType = {
   avatar?: string
   avatarGroup: string[]
   avatarColor?: ThemeColor
+  contactInformation?:string
+  platform?:string
+  createdAt?:string
 }
 export type ProfileHeaderType = {
   fullName: string
