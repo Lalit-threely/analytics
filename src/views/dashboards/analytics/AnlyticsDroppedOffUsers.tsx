@@ -30,14 +30,14 @@ interface CellType {
 const renderName = (row: ProjectTableRowType) => {
   if (row.avatar) {
     return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
-  } else {
+  } else if(row.name) {
     return (
       <CustomAvatar
         skin='light'
         color={(row.avatarColor as ThemeColor) || ('primary' as ThemeColor)}
         sx={{ mr: 2.5, width: 38, height: 38, fontSize: theme => theme.typography.body1.fontSize }}
       >
-        {getInitials(row.name || 'John Doe')}
+        {getInitials(row.name || '')}
       </CustomAvatar>
     )
   }
@@ -159,7 +159,7 @@ const AnalyticsDroppedOffUsers = () => {
         rows={data}
         rowHeight={62}
         columns={columns}
-        checkboxSelection
+        // checkboxSelection
         pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
         paginationModel={paginationModel}

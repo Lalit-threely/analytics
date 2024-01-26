@@ -37,7 +37,7 @@ import { useAuth } from 'src/hooks/useAuth'
 const renderName = (row: ProjectTableRowType) => {
   if (row.avatar) {
     return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
-  } else {
+   } else if(row.name){
     return (
       <CustomAvatar
         skin='light'
@@ -239,7 +239,7 @@ const AnalyticsProject = () => {
   return data ? (
     <Card>
       <CardHeader
-        title='Projects'
+        title='Users'
         titleTypographyProps={{ sx: { mb: [2, 0] } }}
         // action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
         sx={{
@@ -255,7 +255,7 @@ const AnalyticsProject = () => {
         rows={data}
         rowHeight={62}
         columns={columns}
-        checkboxSelection
+        // checkboxSelection
         pageSizeOptions={[5, 10]}
         disableRowSelectionOnClick
         paginationModel={paginationModel}
