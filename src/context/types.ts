@@ -37,7 +37,9 @@ export type getUsers = {
 
 export type AuthValuesType = {
   loading: boolean
-  logout: () => void
+  logout: () => void,
+  clientId:string,
+  setClientId: (clientId: string) => void
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void

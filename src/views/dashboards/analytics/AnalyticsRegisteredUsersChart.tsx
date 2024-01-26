@@ -89,8 +89,8 @@ const AnalyticsRegisteredUsersChart = () => {
     try {
       const response = await auth.getNewRegisteredUsers({
         rangeType: filter,
-        fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108',
-        resultCount: 10
+        fromClientId: auth.clientId,
+        resultCount: 7
       })
 
       if (response.success) {

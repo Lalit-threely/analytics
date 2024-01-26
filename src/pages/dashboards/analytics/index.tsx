@@ -34,7 +34,7 @@ const AnalyticsDashboard = () => {
 
     try {
       const response = await auth.getRegisteredOrVerifiedCount({
-        fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108'
+        fromClientId: auth.clientId
       })
       console.log('response', response)
       setUserData(response)

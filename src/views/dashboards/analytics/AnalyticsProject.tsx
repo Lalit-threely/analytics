@@ -215,9 +215,7 @@ const AnalyticsProject = () => {
 
     try {
       const response = await auth.getUsers({
-        fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108',
-        from: '2024-01-12T00:00:00Z',
-        to: '2024-01-31T23:59:59Z'
+        fromClientId: auth.clientId
       })
       setData(response)
       console.log('response for table data---------->', response)

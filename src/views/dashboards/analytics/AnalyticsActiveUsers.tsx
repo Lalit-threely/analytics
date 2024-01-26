@@ -22,7 +22,7 @@ const AnalyticsActiveUsers = () => {
         rangeType: filter,
 
         // "fromClientId": "7db16867-55c4-4abf-90d9-0f523e29b7c3",
-        fromClientId: '5180b8cc-57d7-4472-9916-21ab42e67108',
+        fromClientId: auth.clientId,
         resultCount: 1,
         verified: true
       })

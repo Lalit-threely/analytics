@@ -19,6 +19,8 @@ const defaultProvider: AuthValuesType = {
   loading: true,
   setUser: () => null,
   setLoading: () => Boolean,
+  clientId:"",
+  setClientId:()=>String,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
@@ -36,7 +38,9 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
-  const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+  const [loading, setLoading] = useState<boolean>(defaultProvider.loading);
+  const [clientId,setClientId]=useState<string>("5180b8cc-57d7-4472-9916-21ab42e67108");
+  const baseURL="http://localhost:8000";
 
   // ** Hooks
   const router = useRouter()
@@ -107,7 +111,7 @@ const AuthProvider = ({ children }: Props) => {
   const getNewRegisteredUsers = async (params: newUserRegisters) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUserCountsInAPeriodController'
+      const apiUrl = `${baseURL}/api/v2/analtyics/getUserCountsInAPeriodController`
 
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
@@ -129,7 +133,7 @@ const AuthProvider = ({ children }: Props) => {
   const getUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getUsers'
+      const apiUrl = `${baseURL}/api/v2/analtyics/getUsers`;
 
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
@@ -151,7 +155,7 @@ const AuthProvider = ({ children }: Props) => {
   const getActiveUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getActiveUsersCount'
+      const apiUrl = `${baseURL}/api/v2/analtyics/getActiveUsersCount`
 
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
@@ -173,7 +177,7 @@ const AuthProvider = ({ children }: Props) => {
   const getRegisteredOrVerifiedCount = async (params: getUsers) => {  
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = 'http://localhost:8000/api/v2/analtyics/getRegisteredOrVerifiedCount'
+      const apiUrl = `${baseURL}/api/v2/analtyics/getRegisteredOrVerifiedCount`
 
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
@@ -197,6 +201,8 @@ const AuthProvider = ({ children }: Props) => {
     loading,
     setUser,
     setLoading,
+    clientId,
+    setClientId,
     login: handleLogin,
     logout: handleLogout,
     getNewRegisteredUsers,
