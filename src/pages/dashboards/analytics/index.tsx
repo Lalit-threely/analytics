@@ -19,17 +19,21 @@ import CardStatsVertical from 'src/@core/components/card-statistics/card-stats-v
 import KeenSliderWrapper from 'src/@core/styles/libs/keen-slider'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import CardStatsWithAreaChart from 'src/@core/components/card-statistics/card-stats-with-area-chart'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useAuth } from 'src/hooks/useAuth'
 
 type userData = { registered_users: number; verified_users: number; non_verified_users: number }
 import AnalyticsRegisteredUsersChart from 'src/views/dashboards/analytics/AnalyticsRegisteredUsersChart'
 import ApexSocialChart from 'src/views/charts/apex-charts/ApexSocialChart'
 import ApexWalletChart from 'src/views/charts/apex-charts/ApexWalletChart'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Box from '@mui/material/Box';
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
   const [chartData, setChartData] = useState()
+  const [cid, setCid] = useState<string>('');
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -65,56 +69,84 @@ const AnalyticsDashboard = () => {
     fetchChartData()
   }, [])
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCid(e.target.value);
+  };
+
+
   return (
-    <ApexChartWrapper>
-      <KeenSliderWrapper>
-        <Grid container spacing={6}>
-          {/* <Grid item xs={12} lg={6}>
+    <>
+      <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      height="30vh" // Adjust the height to your preference
+    >
+      <TextField
+        value={cid}
+        label='Enter client id'
+        variant='outlined'
+        onChange={handleChange}
+        margin="normal"
+      />
+      <Button
+        variant="contained"
+        onClick={() => auth.setClientId(cid)}
+        style={{ marginTop: '10px' }} // Adjust margin as needed
+      >
+        Submit
+      </Button>
+    </Box>
+      <ApexChartWrapper>
+        <KeenSliderWrapper>
+          <Grid container spacing={6}>
+            {/* <Grid item xs={12} lg={6}>
             <AnalyticsWebsiteAnalyticsSlider />
           </Grid> */}
-          <Grid item xs={12} sm={6} lg={6}>
-            <AnalyticsOrderVisits />
-          </Grid>
-          <Grid item xs={12} sm={6} lg={6}>
-            <AnalyticsActiveUsers />
-          </Grid>
-          <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
-            <Grid item xs={4} sm={4}>
-              <CardStatsVertical
-                stats={userData?.registered_users.toString() || ''}
-                avatarColor='info'
-                chipColor='default'
-                title='Total Registered Users'
-                subtitle='Completed registration'
-                avatarIcon='tabler:users'
-              />
+            <Grid item xs={12} sm={6} lg={6}>
+              <AnalyticsOrderVisits />
             </Grid>
-            <Grid item xs={6} sm={3}>
-              <CardStatsVertical
-                stats={userData?.verified_users.toString() || ''}
-                chipColor='info'
-                avatarColor='info'
-                title='Total Verified Users'
-                subtitle='Created trial username & verified'
-                avatarIcon='tabler:chart-bar'
-              />
+            <Grid item xs={12} sm={6} lg={6}>
+              <AnalyticsActiveUsers />
             </Grid>
-            <Grid item xs={6} sm={3}>
-              <CardStatsVertical
-                stats={userData?.non_verified_users.toString() || ''}
-                chipColor='info'
-                avatarColor='error'
-                title='Total dropped Off Users'
-                subtitle='Dropped before creating username'
-                avatarIcon='tabler:chart-bar'
-              />
+            <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
+              <Grid item xs={4} sm={4}>
+                <CardStatsVertical
+                  stats={userData?.registered_users.toString() || ''}
+                  avatarColor='info'
+                  chipColor='default'
+                  title='Total Registered Users'
+                  subtitle='Completed registration'
+                  avatarIcon='tabler:users'
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <CardStatsVertical
+                  stats={userData?.verified_users.toString() || ''}
+                  chipColor='info'
+                  avatarColor='info'
+                  title='Total Verified Users'
+                  subtitle='Created trial username & verified'
+                  avatarIcon='tabler:chart-bar'
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <CardStatsVertical
+                  stats={userData?.non_verified_users.toString() || ''}
+                  chipColor='info'
+                  avatarColor='error'
+                  title='Total dropped Off Users'
+                  subtitle='Dropped before creating username'
+                  avatarIcon='tabler:chart-bar'
+                />
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={12} lg={12}>
-            <AnalyticsRegisteredUsersChart />
-          </Grid>
+            <Grid item xs={12} lg={12}>
+              <AnalyticsRegisteredUsersChart />
+            </Grid>
 
-          {/* <Grid item xs={12} sm={6} lg={3}>
+            {/* <Grid item xs={12} sm={6} lg={3}>
             <CardStatsWithAreaChart
               stats='97.5k'
               chartColor='success'
@@ -124,10 +156,10 @@ const AnalyticsDashboard = () => {
               chartSeries={[{ data: [6, 35, 25, 61, 32, 84, 70] }]}
             />
           </Grid> */}
-          {/* <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
             <AnalyticsEarningReports />
           {/* </Grid> */}
-          {/* <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
             <AnalyticsSupportTracker />
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
@@ -136,31 +168,32 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} md={6} lg={4}>
             <AnalyticsTotalEarning />
           </Grid> */}
-          {/* <Grid item xs={12} md={6} lg={4}>
+            {/* <Grid item xs={12} md={6} lg={4}>
             <AnalyticsMonthlyCampaignState />
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
             <AnalyticsSourceVisits />
           </Grid> */}
-          <Grid item xs={12} lg={12}>
-            <AnalyticsProject />
+            <Grid item xs={12} lg={12}>
+              <AnalyticsProject />
+            </Grid>
+            <Grid item xs={12} lg={12}>
+              <AnalyticsDroppedOffUsers />
+            </Grid>
+            {chartData && (
+              <>
+                <Grid item xs={12} md={6}>
+                  <ApexSocialChart socialMethodCounts={(chartData as any)?.socialMethodCounts} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <ApexWalletChart walletMethodCounts={(chartData as any)?.walletMethodCounts} />
+                </Grid>
+              </>
+            )}
           </Grid>
-          <Grid item xs={12} lg={12}>
-            <AnalyticsDroppedOffUsers />
-          </Grid>
-          {chartData && (
-            <>
-              <Grid item xs={12} md={6}>
-                <ApexSocialChart socialMethodCounts={(chartData as any)?.socialMethodCounts} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <ApexWalletChart walletMethodCounts={(chartData as any)?.walletMethodCounts} />
-              </Grid>
-            </>
-          )}
-        </Grid>
-      </KeenSliderWrapper>
-    </ApexChartWrapper>
+        </KeenSliderWrapper>
+      </ApexChartWrapper>
+    </>
   )
 }
 
