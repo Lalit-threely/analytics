@@ -30,7 +30,7 @@ interface CellType {
 const renderName = (row: ProjectTableRowType) => {
   if (row.avatar) {
     return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
-  } else if(row.name) {
+  } else if (row.name) {
     return (
       <CustomAvatar
         skin='light'
@@ -74,7 +74,7 @@ const columns: GridColDef[] = [
     field: 'contactInformation',
     headerName: 'Contact Info',
     renderCell: ({ row }: CellType) => (
-      <Typography sx={{ color: 'text.secondary' }}>{row?.contactInformation}</Typography>
+      <Typography sx={{ color: 'text.secondary' }}>{row?.contactInformation || '-'}</Typography>
     )
   },
   {
@@ -82,7 +82,7 @@ const columns: GridColDef[] = [
     minWidth: 105,
     field: 'platform',
     headerName: 'Source',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row.platform}</Typography>
+    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row?.platform || '-'}</Typography>
   },
 
   // {
@@ -100,7 +100,7 @@ const columns: GridColDef[] = [
     field: 'createdAt',
     headerName: 'Account Created At',
     renderCell: ({ row }: CellType) => (
-      <Typography sx={{ color: 'text.primary' }}>{row.createdAt && row.createdAt.split('T')[0]}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{(row.createdAt && row?.createdAt?.split('T')[0]) || '-'}</Typography>
     )
   }
 ]
@@ -108,7 +108,6 @@ const columns: GridColDef[] = [
 const AnalyticsDroppedOffUsers = () => {
   // ** State
   const [data, setData] = useState([])
-  const [value, setValue] = useState<string>('')
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
   const [loading, setLoading] = useState(false)
   const auth = useAuth()
@@ -134,11 +133,7 @@ const AnalyticsDroppedOffUsers = () => {
     fetchData()
   }, [])
 
-  const handleFilter = (val: string) => {
-    setValue(val)
-  }
-
-  const getRowId = (row:any) => row.uuid
+  const getRowId = (row: any) => row.uuid
 
   return data ? (
     <Card>
@@ -165,7 +160,7 @@ const AnalyticsDroppedOffUsers = () => {
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         getRowId={getRowId}
-        slots={{ toolbar: GridToolbar }}
+        // slots={{ toolbar: GridToolbar }}
       />
     </Card>
   ) : null
