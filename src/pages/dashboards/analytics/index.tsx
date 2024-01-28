@@ -24,9 +24,12 @@ import { useAuth } from 'src/hooks/useAuth'
 
 type userData = { registered_users: number; verified_users: number; non_verified_users: number }
 import AnalyticsRegisteredUsersChart from 'src/views/dashboards/analytics/AnalyticsRegisteredUsersChart'
+import ApexSocialChart from 'src/views/charts/apex-charts/ApexSocialChart'
+import ApexWalletChart from 'src/views/charts/apex-charts/ApexWalletChart'
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
+  const [chartData, setChartData] = useState()
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -43,8 +46,23 @@ const AnalyticsDashboard = () => {
     }
   }
 
+  const fetchChartData = async () => {
+    // setLoading(true)
+
+    try {
+      const response = await auth.getGroupedDataOfCharts({
+        fromClientId: auth.clientId
+      })
+      console.log('response charts', response)
+      setChartData(response)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
   useEffect(() => {
     fetchData()
+    fetchChartData()
   }, [])
 
   return (
@@ -63,7 +81,7 @@ const AnalyticsDashboard = () => {
           <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
             <Grid item xs={4} sm={4}>
               <CardStatsVertical
-                stats={userData?.registered_users.toString()|| ""}
+                stats={userData?.registered_users.toString() || ''}
                 avatarColor='info'
                 chipColor='default'
                 title='Total Registered Users'
@@ -73,7 +91,7 @@ const AnalyticsDashboard = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <CardStatsVertical
-                stats={userData?.verified_users.toString()|| ""}
+                stats={userData?.verified_users.toString() || ''}
                 chipColor='info'
                 avatarColor='info'
                 title='Total Verified Users'
@@ -83,7 +101,7 @@ const AnalyticsDashboard = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <CardStatsVertical
-                stats={userData?.non_verified_users.toString()|| ""}
+                stats={userData?.non_verified_users.toString() || ''}
                 chipColor='info'
                 avatarColor='error'
                 title='Total dropped Off Users'
@@ -130,6 +148,16 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} lg={12}>
             <AnalyticsDroppedOffUsers />
           </Grid>
+          {chartData && (
+            <>
+              <Grid item xs={12} md={6}>
+                <ApexSocialChart socialMethodCounts={(chartData as any)?.socialMethodCounts} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ApexWalletChart walletMethodCounts={(chartData as any)?.walletMethodCounts} />
+              </Grid>
+            </>
+          )}
         </Grid>
       </KeenSliderWrapper>
     </ApexChartWrapper>

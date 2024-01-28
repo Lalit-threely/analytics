@@ -27,6 +27,7 @@ const defaultProvider: AuthValuesType = {
   getUsers: () => Promise.resolve(),
   getActiveUsers: () => Promise.resolve(),
   getRegisteredOrVerifiedCount:() => Promise.resolve(),
+  getGroupedDataOfCharts:() => Promise.resolve(),
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -40,7 +41,8 @@ const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading);
   const [clientId,setClientId]=useState<string>("5180b8cc-57d7-4472-9916-21ab42e67108");
-  const baseURL="https://staging.tria.so";
+  // const baseURL="https://staging.tria.so";
+  const baseURL="http://localhost:8000";
 
   // ** Hooks
   const router = useRouter()
@@ -206,6 +208,29 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
+  const getGroupedDataOfCharts = async (params: getUsers) => {  
+    try {
+      // Replace 'API_URL' with your actual API endpoint
+      const apiUrl = `${baseURL}/api/v2/analtyics/groupUsersByPlatform`
+
+      // Making the POST request using Axios
+      const response = await axios.post(apiUrl, params)
+
+      // Handling the response data
+      console.log('Response Data:', response.data)
+
+      // You can return the response data or perform other actions based on your requirements
+      return response.data.data
+    } catch (error) {
+      // Handling errors
+      console.error('Error making POST request:', error)
+
+      // You can throw the error or handle it in another way based on your requirements
+      throw error
+    }
+  }
+  
+
   const values = {
     user,
     loading,
@@ -218,7 +243,8 @@ const AuthProvider = ({ children }: Props) => {
     getNewRegisteredUsers,
     getUsers,
     getActiveUsers,
-    getRegisteredOrVerifiedCount
+    getRegisteredOrVerifiedCount,
+    getGroupedDataOfCharts
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

@@ -48,4 +48,5 @@ export type AuthValuesType = {
   getUsers: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>
   getRegisteredOrVerifiedCount: (params: getUsers) => Promise<any>
+  getGroupedDataOfCharts: (params: getUsers) => Promise<any>
 }
