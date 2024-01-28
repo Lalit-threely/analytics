@@ -28,7 +28,7 @@ const ApexWalletChart = ({walletMethodCounts}:{walletMethodCounts:any}) => {
   const options: ApexOptions = {
     stroke: { width: 0 },
     labels: keys,
-    colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
+    colors: [donutColors.series4, donutColors.series5, donutColors.series3, donutColors.series2],
     dataLabels: {
       enabled: true,
       formatter: (val: string) => `${parseInt(val, 10)}%`

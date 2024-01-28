@@ -27,7 +27,7 @@ const ApexSocialChart = ({socialMethodCounts}:{socialMethodCounts:any}) => {
   const options: ApexOptions = {
     stroke: { width: 0 },
     labels: keys,
-    colors: [donutColors.series1, donutColors.series5, donutColors.series3],
+    colors: [donutColors.series4, donutColors.series5, donutColors.series3],
     dataLabels: {
       enabled: true,
       formatter: (val: string) => `${parseInt(val, 10)}%`
