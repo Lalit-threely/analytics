@@ -7,6 +7,7 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
+import { TextField } from '@mui/material'
 
 // ** Custom Component Import
 import CustomTextField from 'src/@core/components/mui/text-field'
@@ -21,6 +22,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 import { useAuth } from 'src/hooks/useAuth'
+import useDebounce from 'src/hooks/useDebounce'
 
 interface CellType {
   row: ProjectTableRowType
@@ -57,7 +59,7 @@ const columns: GridColDef[] = [
           {renderName(row)}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              {name ||"-"}
+              {name || '-'}
             </Typography>
           </Box>
         </Box>
@@ -107,15 +109,26 @@ const AnalyticsDroppedOffUsers = () => {
   const [data, setData] = useState([])
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
   const [loading, setLoading] = useState(false)
-  const auth = useAuth()
+  const [value, setValue] = useState<string | null>(null)
 
-  const fetchData = async () => {
+  const auth = useAuth()
+  const debouncedSearch = useDebounce(value, 500)
+
+  useEffect(() => {
+    async function fetchSearchedData() {
+      await fetchData(debouncedSearch)
+    }
+    if (debouncedSearch) fetchSearchedData()
+  }, [debouncedSearch])
+
+  const fetchData = async (searchValue = '') => {
     setLoading(true)
 
     try {
       const response = await auth.getUsers({
         fromClientId: auth.clientId,
-        verified: false
+        verified: false,
+        ...(searchValue ? { searchText: searchValue } : {})
       })
       setData(response)
       console.log('response for table data---------->', response)
@@ -137,13 +150,23 @@ const AnalyticsDroppedOffUsers = () => {
       <CardHeader
         title='Dropped Off Users'
         titleTypographyProps={{ sx: { mb: [2, 0] } }}
-        // action={<CustomTextField value={value} placeholder='Search' onChange={e => handleFilter(e.target.value)} />}
         sx={{
           py: 4,
           flexDirection: ['column', 'row'],
           '& .MuiCardHeader-action': { m: 0 },
           alignItems: ['flex-start', 'center']
         }}
+        action={
+          <>
+            <TextField
+              label='Search'
+              variant='outlined'
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
+          </>
+        }
       />
       <DataGrid
         autoHeight

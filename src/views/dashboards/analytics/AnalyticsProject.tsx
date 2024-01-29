@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, ChangeEvent, useCallback } from 'react'
 import toast from 'react-hot-toast'
 
 // ** MUI Components
@@ -32,6 +32,7 @@ import DialogContent from '@mui/material/DialogContent'
 import Button from '@mui/material/Button'
 import DialogTitle from '@mui/material/DialogTitle'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
+import useDebounce from 'src/hooks/useDebounce'
 
 // ** renders name column
 const renderName = (row: ProjectTableRowType) => {
@@ -88,7 +89,7 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 150,
     field: 'triaName',
     headerName: 'Tria Name',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row?.triaName || '-'}</Typography>
@@ -111,7 +112,7 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 200,
     field: 'createdAt',
     headerName: 'Account Created At',
     renderCell: ({ row }) => (
@@ -123,7 +124,7 @@ const columns: GridColDef[] = [
 const AnalyticsProject = () => {
   // ** State
   const [data, setData] = useState([])
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState<string | null>(null)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
   const [loading, setLoading] = useState(false)
   const auth = useAuth()
@@ -131,6 +132,8 @@ const AnalyticsProject = () => {
   const [startDate, setStartDate] = useState<any>(new Date().toISOString().split('T')[0]) // Set default value to today
   const [endDate, setEndDate] = useState<any>(new Date().toISOString().split('T')[0])
   const [verified, setVerified] = useState<boolean>(false)
+
+  const debouncedSearch = useDebounce(value, 500)
 
   const handleClickOpen = () => setOpen(true)
 
@@ -141,7 +144,32 @@ const AnalyticsProject = () => {
     setVerified(false)
   }
 
-  const fetchData = async (startDate = undefined, endDate = undefined, verified = false) => {
+  // const fetchData = async (startDate = undefined, endDate = undefined, verified = false) => {
+  //   setLoading(true)
+
+  //   try {
+  //     const response = await auth.getUsers({
+  //       fromClientId: auth.clientId,
+  //       ...(startDate ? { from: startDate } : {}),
+  //       ...(endDate ? { to: endDate } : {}),
+  //       ...(verified ? { verified: verified } : {})
+  //     })
+
+  //     if (startDate && endDate) {
+  //       return response
+  //     } else {
+  //       setData(response)
+  //     }
+
+  //     console.log('response for table data---------->', response)
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  const fetchData = async (startDate = undefined, endDate = undefined, verified = false, searchValue = '') => {
     setLoading(true)
 
     try {
@@ -149,7 +177,8 @@ const AnalyticsProject = () => {
         fromClientId: auth.clientId,
         ...(startDate ? { from: startDate } : {}),
         ...(endDate ? { to: endDate } : {}),
-        ...(verified ? { verified: verified } : {})
+        ...(verified ? { verified: verified } : {}),
+        ...(searchValue ? { searchText: searchValue } : {})
       })
 
       if (startDate && endDate) {
@@ -171,10 +200,15 @@ const AnalyticsProject = () => {
   }, [])
 
   useEffect(() => {
-    console.log('ddksksadnkadsndsak')
+    async function fetchSearchedData() {
+      await fetchData(undefined, undefined, undefined, debouncedSearch)
+    }
+    if (debouncedSearch) fetchSearchedData()
+  }, [debouncedSearch])
+
+  useEffect(() => {
     const currentDate = new Date()
     if (endDate === currentDate.toISOString().split('T')[0]) {
-      // If yes, set the endDate to the current date with the exact time
       setEndDate(currentDate.toISOString())
     }
   }, [endDate])
@@ -249,6 +283,7 @@ const AnalyticsProject = () => {
   const handleVerificationToggle = () => {
     setVerified(!verified)
   }
+
   return data ? (
     <Grid>
       <Card>
@@ -262,9 +297,18 @@ const AnalyticsProject = () => {
             alignItems: ['flex-start', 'center']
           }}
           action={
-            <Button variant='outlined' onClick={handleClickOpen}>
-              Export Data
-            </Button>
+            <Stack direction='row' spacing={2} alignItems='center' sx={{ width: '100%' }}>
+              <Button variant='outlined' onClick={handleClickOpen}>
+                Export Data
+              </Button>
+              <TextField
+                label='Search'
+                variant='outlined'
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                sx={{ flexGrow: 1 }} // Use flexGrow to allow the TextField to take remaining space
+              />
+            </Stack>
           }
         />
         <DataGrid
