@@ -76,7 +76,7 @@ const AnalyticsDashboard = () => {
 
   return (
     <>
-      <Box
+      {/* <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -97,7 +97,7 @@ const AnalyticsDashboard = () => {
       >
         Submit
       </Button>
-    </Box>
+    </Box> */}
       <ApexChartWrapper>
         <KeenSliderWrapper>
           <Grid container spacing={6}>
@@ -107,9 +107,9 @@ const AnalyticsDashboard = () => {
             <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsOrderVisits />
             </Grid>
-            <Grid item xs={12} sm={6} lg={6}>
+            {/* <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsActiveUsers />
-            </Grid>
+            </Grid> */}
             <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
               <Grid item xs={4} sm={4}>
                 <CardStatsVertical

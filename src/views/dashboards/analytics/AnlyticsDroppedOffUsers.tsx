@@ -50,17 +50,14 @@ const columns: GridColDef[] = [
     minWidth: 180,
     headerName: 'Name',
     renderCell: ({ row }: CellType) => {
-      const { name, date } = row
+      const { name } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {renderName(row)}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
-              {name}
-            </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled', textTransform: 'capitalize' }}>
-              {date}
+              {name ||"-"}
             </Typography>
           </Box>
         </Box>
