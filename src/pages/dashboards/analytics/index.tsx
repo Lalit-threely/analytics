@@ -28,12 +28,12 @@ import ApexSocialChart from 'src/views/charts/apex-charts/ApexSocialChart'
 import ApexWalletChart from 'src/views/charts/apex-charts/ApexWalletChart'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
   const [chartData, setChartData] = useState()
-  const [cid, setCid] = useState<string>('');
+  const [cid, setCid] = useState<string>('')
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -70,9 +70,8 @@ const AnalyticsDashboard = () => {
   }, [])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCid(e.target.value);
-  };
-
+    setCid(e.target.value)
+  }
 
   return (
     <>
@@ -110,8 +109,8 @@ const AnalyticsDashboard = () => {
             {/* <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsActiveUsers />
             </Grid> */}
-            <Grid container spacing={4} justifyContent='space-around' style={{ marginTop: 0 }}>
-              <Grid item xs={4} sm={4}>
+            <Grid container spacing={6} justifyContent='space-around' style={{ marginTop: 0 }}>
+              <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.registered_users.toString() || ''}
                   avatarColor='info'
@@ -121,17 +120,17 @@ const AnalyticsDashboard = () => {
                   avatarIcon='tabler:users'
                 />
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.verified_users.toString() || ''}
                   chipColor='info'
                   avatarColor='info'
                   title='Total Verified Users'
-                  subtitle='Created trial username & verified'
+                  subtitle='Created tria username & verified'
                   avatarIcon='tabler:chart-bar'
                 />
               </Grid>
-              <Grid item xs={6} sm={3}>
+              <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.non_verified_users.toString() || ''}
                   chipColor='info'
@@ -142,6 +141,7 @@ const AnalyticsDashboard = () => {
                 />
               </Grid>
             </Grid>
+
             <Grid item xs={12} lg={12}>
               <AnalyticsRegisteredUsersChart />
             </Grid>
