@@ -59,12 +59,34 @@ const AnalyticsOrderVisits = () => {
     setPercentageChange(percentageChange)
   }
 
+  const timePeriod = () => {
+    let timePeriod;
+  
+    // Determine the time period based on the value of defaultFilter
+    switch (defaultFilter) {
+      case 'Daily':
+        timePeriod = 'Today';
+        break;
+      case 'Weekly':
+        timePeriod = 'This Week';
+        break;
+      case 'Monthly':
+        timePeriod = 'This Month';
+        break;
+      case 'Yearly':
+        timePeriod = 'This Year';
+        break;
+      default:
+        timePeriod = ''; // Handle other cases if needed
+    }
+    return timePeriod;
+  }
   return (
     <Card>
       <CardHeader
         sx={{ pb: 0 }}
-        title={`${defaultFilter} Registered Users Overview`}
-        // subheader={`${defaultFilter} Registered Users Overview`}
+        title={`New Registered Users ( ${timePeriod()} )`}
+        subheader={` `}
         action={
           <OptionsMenu
             options={[
