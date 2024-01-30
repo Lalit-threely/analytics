@@ -24,7 +24,8 @@ const AnalyticsOrderVisits = () => {
 
         // "fromClientId": "7db16867-55c4-4abf-90d9-0f523e29b7c3",
         fromClientId: auth.clientId,
-        resultCount: 2
+        resultCount: 2,
+        verified:true
       })
       calculatePercentageChange(response.data[0].count, response.data[1].count)
       setUserCount(response.data[0].count)
@@ -42,7 +43,7 @@ const AnalyticsOrderVisits = () => {
   const handleOptionSelect = (option: string) => {
     console.log(option, "dddddd")
 
-    // setDefaultFilter(option);
+    setDefaultFilter(option);
     fetchData(option);
   };
 
@@ -62,8 +63,8 @@ const AnalyticsOrderVisits = () => {
     <Card>
       <CardHeader
         sx={{ pb: 0 }}
-        title='Registered Users'
-        subheader={`${defaultFilter} Registered Users Overview`}
+        title={`${defaultFilter} Registered Users Overview`}
+        // subheader={`${defaultFilter} Registered Users Overview`}
         action={
           <OptionsMenu
             options={[
@@ -105,11 +106,11 @@ const AnalyticsOrderVisits = () => {
         }
       />
       <CardContent sx={{ p: theme => `${theme.spacing(5)} !important` }}>
-        <Box sx={{ gap: 2, mb: 5, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <Box sx={{ gap: 2, mb: 4.4, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <div>
-            <Typography variant='h4'>{userCount ?? 'Loading...'}</Typography>
+            <Typography variant='h2'>{userCount ?? 'Loading...'}</Typography>
           </div>
-          <Typography sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
+          <Typography variant='h2' sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
             {loading
               ? 'Loading...'
               : percentageChange == null || percentageChange == 0

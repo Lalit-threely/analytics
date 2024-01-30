@@ -125,13 +125,13 @@ const AnalyticsProject = () => {
   // ** State
   const [data, setData] = useState([])
   const [value, setValue] = useState<string | null>(null)
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 })
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const auth = useAuth()
   const [open, setOpen] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<any>(new Date().toISOString().split('T')[0]) // Set default value to today
   const [endDate, setEndDate] = useState<any>(new Date().toISOString().split('T')[0])
-  const [verified, setVerified] = useState<boolean>(false)
+  const [verified, setVerified] = useState<boolean>(true)
 
   const debouncedSearch = useDebounce(value, 500)
 
@@ -169,7 +169,7 @@ const AnalyticsProject = () => {
   //   }
   // }
 
-  const fetchData = async (startDate = undefined, endDate = undefined, verified = false, searchValue = '') => {
+  const fetchData = async (startDate = undefined, endDate = undefined, verified = true, searchValue = '') => {
     setLoading(true)
 
     try {
@@ -323,6 +323,7 @@ const AnalyticsProject = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           getRowId={getRowId}
+          
           // slots={{ toolbar: GridToolbar }}
         />
       </Card>

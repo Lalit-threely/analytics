@@ -18,11 +18,11 @@ const donutColors = {
   series5: '#ffa1a1'
 }
 
-const ApexSocialChart = ({socialMethodCounts}:{socialMethodCounts:any}) => {
+const ApexSocialVsCognito = ({cognitoVsSocialCount}:{cognitoVsSocialCount:any}) => {
   // ** Hook
   const theme = useTheme();
-  const keys= Object.keys(socialMethodCounts)
-  const seriesData = Object.values(socialMethodCounts);
+  const keys= Object.keys(cognitoVsSocialCount)
+  const seriesData = Object.values(cognitoVsSocialCount);
   console.log("keys",keys,seriesData);
   const options: ApexOptions = {
     stroke: { width: 0 },
@@ -109,8 +109,8 @@ const ApexSocialChart = ({socialMethodCounts}:{socialMethodCounts:any}) => {
   return (
     <Card>
       <CardHeader
-        title='Social Authentication'
-        subheader='Split across different Social Methods'
+        title='Social vs Tria Methods Authentication'
+        subheader='Split across Social vs Tria Methods'
         subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
       />
       <CardContent>
@@ -121,4 +121,4 @@ const ApexSocialChart = ({socialMethodCounts}:{socialMethodCounts:any}) => {
   )
 }
 
-export default ApexSocialChart
+export default ApexSocialVsCognito

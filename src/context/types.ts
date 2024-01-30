@@ -23,6 +23,7 @@ export type newUserRegisters = {
   to?: string
   resultCount?: number
   source?: string
+  verified?:boolean
 }
 
 export type getUsers = {

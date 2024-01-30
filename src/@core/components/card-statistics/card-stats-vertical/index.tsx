@@ -31,22 +31,23 @@ const CardStatsVertical = (props: CardStatsVerticalProps) => {
 
   return (
     <Card sx={{ ...sx }}>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <CustomAvatar
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* <CustomAvatar
           skin='light'
           variant='rounded'
           color={avatarColor}
           sx={{ mb: 3.5, width: avatarSize, height: avatarSize }}
         >
           <Icon icon={avatarIcon} fontSize={iconSize} />
-        </CustomAvatar>
-        <Typography variant='h5' sx={{ mb: 1 }}>
-          {title}
-        </Typography>
+        </CustomAvatar> */}
+      
         <Typography variant='body2' sx={{ mb: 1, color: 'text.disabled' }}>
           {subtitle}
         </Typography>
-        <Typography sx={{ mb: 3.5, color: 'text.secondary' }}>{stats}</Typography>
+        <Typography sx={{fontSize:"40px", mb: 3.5, color: 'text.secondary' }}>{stats}</Typography>
+        <Typography variant='h5' sx={{ mb: 1 }}>
+          {title}
+        </Typography>
         {chipText && <RenderChip
           size='small'
           label={chipText}
