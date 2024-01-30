@@ -90,7 +90,8 @@ const AnalyticsRegisteredUsersChart = () => {
       const response = await auth.getNewRegisteredUsers({
         rangeType: filter,
         fromClientId: auth.clientId,
-        resultCount: 7
+        resultCount: 7,
+        verified:true
       })
 
       if (response.success) {
@@ -111,9 +112,9 @@ const AnalyticsRegisteredUsersChart = () => {
           xCategories = sortedData.map((entry:any) => {
             const fromDate = new Date(entry.from)
             const toDate = new Date(entry.to)
-            const formattedRange = `${fromDate.getDate()}${fromDate.toLocaleDateString('en', {
+            const formattedRange = `${fromDate.getDate()+' '}${fromDate.toLocaleDateString('en', {
               month: 'short'
-            })}-${toDate.getDate()}${toDate.toLocaleDateString('en', { month: 'short' })}`
+            })}-${toDate.getDate()+' '}${toDate.toLocaleDateString('en', { month: 'short' })}`
 
             return formattedRange
           })
@@ -182,7 +183,7 @@ const AnalyticsRegisteredUsersChart = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '350px'
+            height: '400px'
           }}
         >
           <CircularProgress color='success' size={60} />

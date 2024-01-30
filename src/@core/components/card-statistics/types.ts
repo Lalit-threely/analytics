@@ -40,7 +40,7 @@ export type CardStatsVerticalProps = {
   stats: string
   title: string
   chipText?: string
-  subtitle: string
+  subtitle?: string
   avatarIcon: string
   sx?: SxProps<Theme>
   avatarSize?: number

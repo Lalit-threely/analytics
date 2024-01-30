@@ -24,7 +24,8 @@ const AnalyticsOrderVisits = () => {
 
         // "fromClientId": "7db16867-55c4-4abf-90d9-0f523e29b7c3",
         fromClientId: auth.clientId,
-        resultCount: 2
+        resultCount: 2,
+        verified:true
       })
       calculatePercentageChange(response.data[0].count, response.data[1].count)
       setUserCount(response.data[0].count)
@@ -42,7 +43,7 @@ const AnalyticsOrderVisits = () => {
   const handleOptionSelect = (option: string) => {
     console.log(option, "dddddd")
 
-    // setDefaultFilter(option);
+    setDefaultFilter(option);
     fetchData(option);
   };
 
@@ -58,12 +59,34 @@ const AnalyticsOrderVisits = () => {
     setPercentageChange(percentageChange)
   }
 
+  const timePeriod = () => {
+    let timePeriod;
+  
+    // Determine the time period based on the value of defaultFilter
+    switch (defaultFilter) {
+      case 'Daily':
+        timePeriod = 'Today';
+        break;
+      case 'Weekly':
+        timePeriod = 'This Week';
+        break;
+      case 'Monthly':
+        timePeriod = 'This Month';
+        break;
+      case 'Yearly':
+        timePeriod = 'This Year';
+        break;
+      default:
+        timePeriod = ''; // Handle other cases if needed
+    }
+    return timePeriod;
+  }
   return (
     <Card>
       <CardHeader
         sx={{ pb: 0 }}
-        title='Registered Users'
-        subheader={`${defaultFilter} Registered Users Overview`}
+        title={`New Registered Users ( ${timePeriod()} )`}
+        subheader={` `}
         action={
           <OptionsMenu
             options={[
@@ -105,15 +128,15 @@ const AnalyticsOrderVisits = () => {
         }
       />
       <CardContent sx={{ p: theme => `${theme.spacing(5)} !important` }}>
-        <Box sx={{ gap: 2, mb: 5, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <Box sx={{ gap: 2, mb: 4.4, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',ml:3 }}>
           <div>
-            <Typography variant='h4'>{userCount ?? 'Loading...'}</Typography>
+            <Typography variant='h2'>{userCount ?? '-'}</Typography>
           </div>
-          <Typography sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
+          <Typography variant='h2' sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
             {loading
-              ? 'Loading...'
+              ? '-'
               : percentageChange == null || percentageChange == 0
-              ? 'N/A'
+              ? '-'
               : `${percentageChange.toFixed(2)}%`}
           </Typography>
         </Box>
