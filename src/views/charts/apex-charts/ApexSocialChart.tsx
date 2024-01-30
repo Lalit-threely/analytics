@@ -109,7 +109,7 @@ const ApexSocialChart = ({socialMethodCounts}:{socialMethodCounts:any}) => {
   return (
     <Card>
       <CardHeader
-        title='Social Authentication'
+        title='Social Signups'
         subheader='Split across different Social Methods'
         subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
       />

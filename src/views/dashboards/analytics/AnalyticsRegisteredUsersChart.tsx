@@ -183,7 +183,7 @@ const AnalyticsRegisteredUsersChart = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '350px'
+            height: '400px'
           }}
         >
           <CircularProgress color='success' size={60} />

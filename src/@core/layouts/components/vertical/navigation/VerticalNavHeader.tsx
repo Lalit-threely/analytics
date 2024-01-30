@@ -93,7 +93,7 @@ const VerticalNavHeader = (props: Props) => {
       {userNavMenuBranding ? (
         userNavMenuBranding(props)
       ) : (
-        <LinkStyled href='/'>
+        <LinkStyled href='/dashboards/analytics/'>
          <img src="https://svgshare.com/i/11sN.svg" alt="" height="30px" width="30px" />
           <HeaderTitle variant='h4' sx={{ ...menuCollapsedStyles, ...(navCollapsed && !navHover ? {} : { ml: 2.5 }) }}>
             {themeConfig.templateName}
@@ -114,7 +114,7 @@ const VerticalNavHeader = (props: Props) => {
         <IconButton
           disableRipple
           disableFocusRipple
-          onClick={() => saveSettings({ ...settings, navCollapsed: !navCollapsed })}
+          // onClick={() => saveSettings({ ...settings, navCollapsed: !navCollapsed })}
           sx={{
             p: 0,
             color: 'text.primary',

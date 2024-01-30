@@ -109,7 +109,7 @@ const ApexSocialVsCognito = ({cognitoVsSocialCount}:{cognitoVsSocialCount:any}) 
   return (
     <Card>
       <CardHeader
-        title='Social vs Tria Methods Authentication'
+        title='Email/Phone vs Social Signups'
         subheader='Split across Social vs Tria Methods'
         subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
       />

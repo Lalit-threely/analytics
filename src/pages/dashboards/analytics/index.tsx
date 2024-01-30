@@ -152,15 +152,15 @@ const AnalyticsDashboard = () => {
 
             {chartData && (
               <>
+                 <Grid item xs={12} md={6}>
+                  <ApexSocialVsCognito cognitoVsSocialCount={(chartData as any)?.cognitoVsSocialCount} />
+                </Grid>
                 <Grid item xs={12} md={6}>
                   <ApexSocialChart socialMethodCounts={(chartData as any)?.socialMethodCounts} />
                 </Grid>
                 {/* <Grid item xs={12} md={6}>
                   <ApexWalletChart walletMethodCounts={(chartData as any)?.walletMethodCounts} />
                 </Grid> */}
-                <Grid item xs={12} md={6}>
-                  <ApexSocialVsCognito cognitoVsSocialCount={(chartData as any)?.cognitoVsSocialCount} />
-                </Grid>
               </>
             )}
 

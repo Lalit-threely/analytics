@@ -297,7 +297,7 @@ const AnalyticsProject = () => {
                 onChange={handleSearch}
                 sx={{ flexGrow: 1 }} // Use flexGrow to allow the TextField to take remaining space
               />
-              <Button variant='outlined' onClick={handleClickOpen}>
+              <Button variant='outlined' sx={{ height: 55, fontSize: 18, marginRight: 20 }} onClick={handleClickOpen}>
                 Export Data
               </Button>
             </Stack>
