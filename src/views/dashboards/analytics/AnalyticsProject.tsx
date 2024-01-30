@@ -94,7 +94,7 @@ const columns: GridColDef[] = [
     headerName: 'Source',
     renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.primary' }}>
-        {row?.platform === 'cognito' ? 'Email/Phone' : (row?.platform || '-')}
+        {row?.platform === 'cognito' ? 'Email/Phone' : row?.platform || '-'}
       </Typography>
     )
   },
@@ -128,7 +128,7 @@ const columns: GridColDef[] = [
 const AnalyticsProject = () => {
   // ** State
   const [data, setData] = useState([])
-  const [value, setValue] = useState<string | null>(null)
+  const [value, setValue] = useState<string | null>('')
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const [loading, setLoading] = useState(false)
   const auth = useAuth()
@@ -137,7 +137,7 @@ const AnalyticsProject = () => {
   const [endDate, setEndDate] = useState<any>(new Date().toISOString().split('T')[0])
   const [verified, setVerified] = useState<boolean>(true)
 
-  const debouncedSearch = useDebounce(value, 500)
+  const debouncedSearch = useDebounce(value, 100)
 
   const handleClickOpen = () => setOpen(true)
 
@@ -147,31 +147,6 @@ const AnalyticsProject = () => {
     setEndDate(new Date().toISOString().split('T')[0])
     setVerified(false)
   }
-
-  // const fetchData = async (startDate = undefined, endDate = undefined, verified = false) => {
-  //   setLoading(true)
-
-  //   try {
-  //     const response = await auth.getUsers({
-  //       fromClientId: auth.clientId,
-  //       ...(startDate ? { from: startDate } : {}),
-  //       ...(endDate ? { to: endDate } : {}),
-  //       ...(verified ? { verified: verified } : {})
-  //     })
-
-  //     if (startDate && endDate) {
-  //       return response
-  //     } else {
-  //       setData(response)
-  //     }
-
-  //     console.log('response for table data---------->', response)
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
 
   const fetchData = async (startDate = undefined, endDate = undefined, verified = true, searchValue = '') => {
     setLoading(true)
@@ -189,9 +164,8 @@ const AnalyticsProject = () => {
         return response
       } else {
         setData(response)
+        return response
       }
-
-      console.log('response for table data---------->', response)
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
@@ -205,7 +179,15 @@ const AnalyticsProject = () => {
 
   useEffect(() => {
     async function fetchSearchedData() {
-      await fetchData(undefined, undefined, undefined, debouncedSearch)
+      const data = await fetchData(undefined, undefined, undefined, debouncedSearch)
+
+      const filteredData = data.filter((item: any) => {
+        const contactMatch = new RegExp(debouncedSearch, 'i').test(item.contactInformation)
+        const triaNameMatch = new RegExp(debouncedSearch, 'i').test(item.triaName)
+
+        return contactMatch || triaNameMatch
+      })
+      setData(filteredData)
     }
     if (debouncedSearch) fetchSearchedData()
   }, [debouncedSearch])
@@ -287,6 +269,12 @@ const AnalyticsProject = () => {
   const handleVerificationToggle = () => {
     setVerified(!verified)
   }
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value)
+    if (e.target.value === '') {
+      fetchData()
+    }
+  }
 
   return data ? (
     <Grid>
@@ -302,16 +290,16 @@ const AnalyticsProject = () => {
           }}
           action={
             <Stack direction='row' spacing={2} alignItems='center' sx={{ width: '100%' }}>
-              <Button variant='outlined' onClick={handleClickOpen}>
-                Export Data
-              </Button>
               <TextField
                 label='Search'
                 variant='outlined'
                 value={value}
-                onChange={e => setValue(e.target.value)}
+                onChange={handleSearch}
                 sx={{ flexGrow: 1 }} // Use flexGrow to allow the TextField to take remaining space
               />
+              <Button variant='outlined' onClick={handleClickOpen}>
+                Export Data
+              </Button>
             </Stack>
           }
         />
@@ -327,7 +315,7 @@ const AnalyticsProject = () => {
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
           getRowId={getRowId}
-          
+
           // slots={{ toolbar: GridToolbar }}
         />
       </Card>

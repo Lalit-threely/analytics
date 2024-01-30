@@ -57,7 +57,7 @@ const AnalyticsDashboard = () => {
     try {
       const response = await auth.getGroupedDataOfCharts({
         fromClientId: auth.clientId,
-        verified:true
+        verified: true
       })
       console.log('response charts', response)
       setChartData(response)
@@ -105,11 +105,11 @@ const AnalyticsDashboard = () => {
             {/* <Grid item xs={12} lg={6}>
             <AnalyticsWebsiteAnalyticsSlider />
           </Grid> */}
-           
+
             {/* <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsActiveUsers />
             </Grid> */}
-            <Grid container spacing={6} justifyContent='center'  style={{ marginTop: 0 ,marginLeft:0}}>
+            <Grid container spacing={6} justifyContent='center' style={{ marginTop: 0, marginLeft: 0 }}>
               {/* <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.registered_users.toString() || ''}
@@ -130,7 +130,7 @@ const AnalyticsDashboard = () => {
                   avatarIcon='tabler:chart-bar'
                 />
               </Grid>
-              
+
               {/* <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.non_verified_users.toString() || ''}
@@ -141,12 +141,10 @@ const AnalyticsDashboard = () => {
                   avatarIcon='tabler:chart-bar'
                 />
               </Grid> */}
-               <Grid item xs={12} sm={6} lg={6}>
-              <AnalyticsOrderVisits />
+              <Grid item xs={12} sm={6} lg={6}>
+                <AnalyticsOrderVisits />
+              </Grid>
             </Grid>
-            </Grid>
-
-           
 
             <Grid item xs={12} lg={12}>
               <AnalyticsRegisteredUsersChart />
@@ -200,7 +198,6 @@ const AnalyticsDashboard = () => {
             {/* <Grid item xs={12} lg={12}>
               <AnalyticsDroppedOffUsers />
             </Grid> */}
-            
           </Grid>
         </KeenSliderWrapper>
       </ApexChartWrapper>
