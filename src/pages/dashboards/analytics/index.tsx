@@ -122,7 +122,7 @@ const AnalyticsDashboard = () => {
               </Grid> */}
               <Grid item xs={12} sm={6} lg={4}>
                 <CardStatsVertical
-                  stats={userData?.verified_users.toString() || ''}
+                  stats={userData?.verified_users.toString() || '-'}
                   chipColor='info'
                   avatarColor='info'
                   title='Total Registered Users'
