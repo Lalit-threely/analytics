@@ -109,7 +109,7 @@ const AnalyticsDashboard = () => {
             {/* <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsActiveUsers />
             </Grid> */}
-            <Grid container spacing={6} justifyContent='space-around' style={{ marginTop: 0 }}>
+            <Grid container spacing={6} justifyContent='center'  style={{ marginTop: 0 ,marginLeft:0}}>
               {/* <Grid item xs={6} sm={3} lg={3.5}>
                 <CardStatsVertical
                   stats={userData?.registered_users.toString() || ''}
@@ -120,7 +120,7 @@ const AnalyticsDashboard = () => {
                   avatarIcon='tabler:users'
                 />
               </Grid> */}
-              <Grid item xs={12} sm={6} lg={4}>
+              <Grid item xs={12} sm={6} lg={6}>
                 <CardStatsVertical
                   stats={userData?.verified_users.toString() || '-'}
                   chipColor='info'
@@ -141,7 +141,7 @@ const AnalyticsDashboard = () => {
                   avatarIcon='tabler:chart-bar'
                 />
               </Grid> */}
-               <Grid item xs={12} sm={6} lg={4}>
+               <Grid item xs={12} sm={6} lg={6}>
               <AnalyticsOrderVisits />
             </Grid>
             </Grid>

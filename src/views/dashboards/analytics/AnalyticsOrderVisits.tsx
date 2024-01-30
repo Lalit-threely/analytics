@@ -106,15 +106,15 @@ const AnalyticsOrderVisits = () => {
         }
       />
       <CardContent sx={{ p: theme => `${theme.spacing(5)} !important` }}>
-        <Box sx={{ gap: 2, mb: 4.4, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <Box sx={{ gap: 2, mb: 4.4, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',ml:3 }}>
           <div>
-            <Typography variant='h2'>{userCount ?? 'Loading...'}</Typography>
+            <Typography variant='h2'>{userCount ?? '-'}</Typography>
           </div>
           <Typography variant='h2' sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}>
             {loading
-              ? 'Loading...'
+              ? '-'
               : percentageChange == null || percentageChange == 0
-              ? 'N/A'
+              ? '-'
               : `${percentageChange.toFixed(2)}%`}
           </Typography>
         </Box>

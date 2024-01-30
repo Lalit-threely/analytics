@@ -78,10 +78,14 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 120,
     field: 'platform',
     headerName: 'Source',
-    renderCell: ({ row }: CellType) => <Typography sx={{ color: 'text.primary' }}>{row?.platform || '-'}</Typography>
+    renderCell: ({ row }) => (
+      <Typography sx={{ color: 'text.primary' }}>
+        {row?.platform === 'cognito' ? 'Email/Phone' : (row?.platform || '-')}
+      </Typography>
+    )
   },
 
   // {

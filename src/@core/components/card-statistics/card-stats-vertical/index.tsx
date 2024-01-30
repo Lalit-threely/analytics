@@ -40,14 +40,14 @@ const CardStatsVertical = (props: CardStatsVerticalProps) => {
         >
           <Icon icon={avatarIcon} fontSize={iconSize} />
         </CustomAvatar> */}
-      
+       <Typography variant='h5' sx={{ mb: 1 }}>
+          {title}
+        </Typography>
         <Typography variant='body2' sx={{ mb: 1, color: 'text.disabled' }}>
           {subtitle}
         </Typography>
         <Typography sx={{fontSize:"40px", mb: 3.5, color: 'text.secondary' }}>{stats}</Typography>
-        <Typography variant='h5' sx={{ mb: 1 }}>
-          {title}
-        </Typography>
+       
         {chipText && <RenderChip
           size='small'
           label={chipText}

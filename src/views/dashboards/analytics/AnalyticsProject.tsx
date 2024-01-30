@@ -54,15 +54,22 @@ const renderName = (row: ProjectTableRowType) => {
 const columns: GridColDef[] = [
   {
     flex: 0.1,
+    minWidth: 220,
+    field: 'triaName',
+    headerName: 'Tria Name',
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row?.triaName || '-'}</Typography>
+  },
+  {
+    flex: 0.1,
     field: 'name',
-    minWidth: 180,
+    minWidth: 200,
     headerName: 'Name',
     renderCell: ({ row }) => {
       const { name } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {renderName(row)}
+          {/* {renderName(row)} */}
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography noWrap sx={{ color: 'text.secondary', fontWeight: 500 }}>
               {name || '-'}
@@ -82,17 +89,14 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 120,
     field: 'platform',
     headerName: 'Source',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row?.platform || '-'}</Typography>
-  },
-  {
-    flex: 0.1,
-    minWidth: 150,
-    field: 'triaName',
-    headerName: 'Tria Name',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.primary' }}>{row?.triaName || '-'}</Typography>
+    renderCell: ({ row }) => (
+      <Typography sx={{ color: 'text.primary' }}>
+        {row?.platform === 'cognito' ? 'Email/Phone' : (row?.platform || '-')}
+      </Typography>
+    )
   },
   {
     flex: 0.1,
@@ -103,11 +107,11 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 200,
     field: 'lastLoginTime',
     headerName: 'Last Login',
     renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.primary' }}>{row?.lastLoginTime.split('T')[0] || '-'}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{new Date(row?.lastLoginTime).toLocaleString() || '-'}</Typography>
     )
   },
   {
@@ -116,7 +120,7 @@ const columns: GridColDef[] = [
     field: 'createdAt',
     headerName: 'Account Created At',
     renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.primary' }}>{row?.createdAt.split('T')[0] || '-'}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{new Date(row?.createdAt).toLocaleString() || '-'}</Typography>
     )
   }
 ]
