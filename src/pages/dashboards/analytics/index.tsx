@@ -152,7 +152,7 @@ const AnalyticsDashboard = () => {
 
             {chartData && (
               <>
-                 <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                   <ApexSocialVsCognito cognitoVsSocialCount={(chartData as any)?.cognitoVsSocialCount} />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -192,9 +192,9 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} md={6} lg={4}>
             <AnalyticsSourceVisits />
           </Grid> */}
-            <Grid item xs={12} lg={12}>
+            {/* <Grid item xs={12} lg={12}>
               <AnalyticsProject />
-            </Grid>
+            </Grid> */}
             {/* <Grid item xs={12} lg={12}>
               <AnalyticsDroppedOffUsers />
             </Grid> */}

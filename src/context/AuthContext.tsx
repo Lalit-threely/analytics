@@ -16,18 +16,18 @@ import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType, newUserRegi
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   user: null,
-  loading: true,
+  loading: false,
   setUser: () => null,
   setLoading: () => Boolean,
-  clientId:"",
-  setClientId:()=>String,
+  clientId: '',
+  setClientId: () => String,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
   getUsers: () => Promise.resolve(),
   getActiveUsers: () => Promise.resolve(),
-  getRegisteredOrVerifiedCount:() => Promise.resolve(),
-  getGroupedDataOfCharts:() => Promise.resolve(),
+  getRegisteredOrVerifiedCount: () => Promise.resolve(),
+  getGroupedDataOfCharts: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -39,9 +39,9 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
-  const [loading, setLoading] = useState<boolean>(defaultProvider.loading);
-  const [clientId,setClientId]=useState<string>("5180b8cc-57d7-4472-9916-21ab42e67108");
-  const baseURL="https://staging.tria.so";
+  const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+  const [clientId, setClientId] = useState<string>('5180b8cc-57d7-4472-9916-21ab42e67108')
+  const baseURL = 'https://staging.tria.so'
   // const baseURL="http://localhost:8000";
 
   // ** Hooks
@@ -84,7 +84,7 @@ const AuthProvider = ({ children }: Props) => {
       //   password: "",
       // });
       setLoading(false)
-      router.replace('/dashboards/analytics/');
+      // router.replace('/dashboard/home')
     }
 
     initAuth()
@@ -145,7 +145,7 @@ const AuthProvider = ({ children }: Props) => {
   const getUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/getUsers`;
+      const apiUrl = `${baseURL}/api/v2/analtyics/getUsers`
 
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
@@ -186,7 +186,7 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  const getRegisteredOrVerifiedCount = async (params: getUsers) => {  
+  const getRegisteredOrVerifiedCount = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
       const apiUrl = `${baseURL}/api/v2/analtyics/getRegisteredOrVerifiedCount`
@@ -208,7 +208,7 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  const getGroupedDataOfCharts = async (params: getUsers) => {  
+  const getGroupedDataOfCharts = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
       const apiUrl = `${baseURL}/api/v2/analtyics/groupUsersByPlatform`
@@ -229,7 +229,6 @@ const AuthProvider = ({ children }: Props) => {
       throw error
     }
   }
-  
 
   const values = {
     user,

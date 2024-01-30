@@ -91,13 +91,13 @@ if (themeConfig.routingLoader) {
 }
 
 const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
-  // if (guestGuard) {
-  //   return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
-  // } else if (!guestGuard && !authGuard) {
+  if (guestGuard) {
+    return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
+  } else if (!guestGuard && !authGuard) {
     return <>{children}</>
-  // } else {
-  //   return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
-  // }
+  } else {
+    return <AuthGuard fallback={<Spinner />}>{children}</AuthGuard>
+  }
 }
 
 // ** Configure JSS & ClassName
@@ -122,10 +122,7 @@ const App = (props: ExtendedAppProps) => {
       <CacheProvider value={emotionCache}>
         <Head>
           <title>{`${themeConfig.templateName} - Analytics`}</title>
-          <meta
-            name='description'
-            content={`${themeConfig.templateName}`}
-          />
+          <meta name='description' content={`${themeConfig.templateName}`} />
           <meta name='keywords' content='Tria analytics, Tria, Blockchain, web3 wallet' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
@@ -137,9 +134,9 @@ const App = (props: ExtendedAppProps) => {
                 return (
                   <ThemeComponent settings={settings}>
                     <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      {/* <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
                         {getLayout(<Component {...pageProps} />)}
-                      {/* </AclGuard> */}
+                      </AclGuard>
                     </Guard>
                     <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
