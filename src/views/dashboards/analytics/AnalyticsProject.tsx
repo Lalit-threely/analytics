@@ -94,7 +94,7 @@ const columns: GridColDef[] = [
     headerName: 'Source',
     renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.primary' }}>
-        {row?.platform === 'cognito' ? 'Email/Phone' : row?.platform || '-'}
+        {row?.platform === 'cognito' || row?.verificationType==='link' || row?.verificationType==='otp' ? 'Email/Phone' : row?.platform || '-'}
       </Typography>
     )
   },
