@@ -40,8 +40,8 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
-  const [clientId, setClientId] = useState<string>('5180b8cc-57d7-4472-9916-21ab42e67108')
-  const baseURL = 'https://staging.tria.so'
+  const [clientId, setClientId] = useState<string>('b48d8230-57f9-43fb-a952-722668bb3520')
+  const baseURL = 'https://prod.tria.so'
   // const baseURL="http://localhost:8000";
 
   // ** Hooks
@@ -49,32 +49,33 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
-      // const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
-      // if (storedToken) {
-      //   setLoading(true)
-      //   await axios
-      //     .get(authConfig.meEndpoint, {
-      //       headers: {
-      //         Authorization: storedToken
-      //       }
-      //     })
-      //     .then(async response => {
-      //       setLoading(false)
-      //       setUser({ ...response.data.userData })
-      //     })
-      //     .catch(() => {
-      //       localStorage.removeItem('userData')
-      //       localStorage.removeItem('refreshToken')
-      //       localStorage.removeItem('accessToken')
-      //       setUser(null)
-      //       setLoading(false)
-      //       if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-      //         router.replace('/login')
-      //       }
-      //     })
-      // } else {
-      //   setLoading(false)
-      // }
+      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+      if (storedToken) {
+        setLoading(true)
+        await axios
+          .get(authConfig.meEndpoint, {
+            headers: {
+              Authorization: storedToken
+            }
+          })
+          .then(async response => {
+            setLoading(false)
+            console.log('response.data.userData', response.data.userData)
+            setUser({ ...response.data.userData })
+          })
+          .catch(() => {
+            localStorage.removeItem('userData')
+            localStorage.removeItem('refreshToken')
+            localStorage.removeItem('accessToken')
+            setUser(null)
+            setLoading(false)
+            if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+              router.replace('/login')
+            }
+          })
+      } else {
+        setLoading(false)
+      }
       // setUser({
       //   id: 1,
       //   role: "",
@@ -83,7 +84,7 @@ const AuthProvider = ({ children }: Props) => {
       //   username: "",
       //   password: "",
       // });
-      setLoading(false)
+      // setLoading(false)
       // router.replace('/dashboard/home')
     }
 
@@ -101,7 +102,7 @@ const AuthProvider = ({ children }: Props) => {
         const returnUrl = router.query.returnUrl
 
         setUser({ ...response.data.userData })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify({"id":1,"role":"admin","fullName":"John Doe","username":"johndoe","email":"admin@vuexy.com"})) : null
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 

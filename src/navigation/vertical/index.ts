@@ -11,9 +11,9 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'User Details',
-      icon: 'tabler:smart-home',
+      icon: 'tabler:user',
       badgeColor: 'error',
-      path: '/dashboards/crm'
+      path: '/dashboards/userDetails'
     }
     // Add more items as needed
   ]

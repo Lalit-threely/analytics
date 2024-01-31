@@ -33,6 +33,7 @@ import Button from '@mui/material/Button'
 import DialogTitle from '@mui/material/DialogTitle'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import useDebounce from 'src/hooks/useDebounce'
+import { discordIcon, googleIcon, instaIcon, smsIcon, xIcon } from 'src/@core/icons'
 
 // ** renders name column
 const renderName = (row: ProjectTableRowType) => {
@@ -51,6 +52,23 @@ const renderName = (row: ProjectTableRowType) => {
   }
 }
 
+const renderIcon=(platform:string)=>{
+    switch (platform) {
+      case 'google':
+        return googleIcon();
+      case 'twitter':
+        return xIcon();
+      case 'discord':
+        return discordIcon();
+      case 'instagram':
+        return instaIcon();
+        case 'cognito':
+          return smsIcon();
+      default:
+        return null;
+    }
+}
+
 const columns: GridColDef[] = [
   {
     flex: 0.1,
@@ -62,7 +80,7 @@ const columns: GridColDef[] = [
   {
     flex: 0.1,
     field: 'name',
-    minWidth: 200,
+    minWidth: 170,
     headerName: 'Name',
     renderCell: ({ row }) => {
       const { name } = row
@@ -82,28 +100,34 @@ const columns: GridColDef[] = [
 
   {
     flex: 0.1,
-    minWidth: 250,
+    minWidth: 320,
     field: 'contactInformation',
     headerName: 'Contact Info',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row?.contactInformation || '-'}</Typography>
   },
   {
     flex: 0.1,
-    minWidth: 120,
+    minWidth: 160,
     field: 'platform',
     headerName: 'Source',
     renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.primary' }}>
-        {row?.platform === 'cognito' ? 'Email/Phone' : row?.platform || '-'}
-      </Typography>
+      <Typography sx={{ color: 'text.primary', display: 'flex' }}>
+      {row?.platform && (
+        <>
+          {renderIcon(row?.platform)}
+          <span style={{ marginRight: '8px' }} />
+        </>
+      )}
+      {row?.platform === 'cognito' ? 'Email/Phone' : row?.platform || '-'}
+    </Typography>
     )
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 130,
     field: 'loginCount',
     headerName: 'Login Count',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row?.loginCount + 1 || '-'}</Typography>
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary',margin:'auto' }}>{row?.loginCount + 1 || '-'}</Typography>
   },
   {
     flex: 0.1,
@@ -111,6 +135,7 @@ const columns: GridColDef[] = [
     field: 'lastLoginTime',
     headerName: 'Last Login',
     renderCell: ({ row }) => (
+
       <Typography sx={{ color: 'text.primary' }}>{new Date(row?.lastLoginTime).toLocaleString() || '-'}</Typography>
     )
   },
@@ -159,12 +184,17 @@ const AnalyticsProject = () => {
         ...(verified ? { verified: verified } : {}),
         ...(searchValue ? { searchText: searchValue } : {})
       })
-
+      const modifiedResponse = response.sort((a:any, b:any) => {
+        const dateA = new Date(a.createdAt || 0);
+        const dateB = new Date(b.createdAt || 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+      
       if (startDate && endDate) {
-        return response
+        return modifiedResponse
       } else {
-        setData(response)
-        return response
+        setData(modifiedResponse)
+        return modifiedResponse;
       }
     } catch (error) {
       console.error('Error fetching data:', error)

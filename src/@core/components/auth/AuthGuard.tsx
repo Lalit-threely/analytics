@@ -24,7 +24,7 @@ const AuthGuard = (props: AuthGuardProps) => {
       }
 
       if (auth.user === null && !window.localStorage.getItem('userData')) {
-        router.replace('/dashboards/analytics')
+        router.replace('/login')
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

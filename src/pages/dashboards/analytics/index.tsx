@@ -30,6 +30,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import ApexSocialVsCognito from 'src/views/charts/apex-charts/ApexSocialVsCognito'
+import Typography from '@mui/material/Typography';
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
@@ -100,6 +101,14 @@ const AnalyticsDashboard = () => {
       </Button>
     </Box> */}
       <ApexChartWrapper>
+      <Typography
+      variant="h2"
+      component="div"
+      gutterBottom
+      style={{ textAlign: 'center', padding: '15px', backgroundColor: 'rgb(104 94 213)', color: '#fff',borderRadius:'20px',marginBottom:"20px" }}
+    >
+      User Analytics
+    </Typography>
         <KeenSliderWrapper>
           <Grid container spacing={6}>
             {/* <Grid item xs={12} lg={6}>
