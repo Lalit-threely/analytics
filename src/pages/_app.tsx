@@ -107,11 +107,11 @@ const App = (props: ExtendedAppProps) => {
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
   const getLayout =
-    Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
+    Component.getLayout || (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
 
   const setConfig = Component.setConfig ?? undefined
 
-  const authGuard = Component.authGuard ?? true
+  const authGuard = Component.authGuard ?? false
 
   const guestGuard = Component.guestGuard ?? false
 
@@ -133,11 +133,11 @@ const App = (props: ExtendedAppProps) => {
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                        {getLayout(<Component {...pageProps} />)}
-                      </AclGuard>
-                    </Guard>
+                    {/* <Guard authGuard={authGuard} guestGuard={guestGuard}> */}
+                    {/* <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}> */}
+                    {getLayout(<Component {...pageProps} />)}
+                    {/* </AclGuard> */}
+                    {/* // </Guard> */}
                     <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
                     </ReactHotToast>
