@@ -52,21 +52,21 @@ const renderName = (row: ProjectTableRowType) => {
   }
 }
 
-const renderIcon=(platform:string)=>{
-    switch (platform) {
-      case 'google':
-        return googleIcon();
-      case 'twitter':
-        return xIcon();
-      case 'discord':
-        return discordIcon();
-      case 'instagram':
-        return instaIcon();
-        case 'cognito':
-          return smsIcon();
-      default:
-        return null;
-    }
+const renderIcon = (platform: any) => {
+  switch (platform) {
+    case 'google':
+      return googleIcon()
+    case 'twitter':
+      return xIcon()
+    case 'discord':
+      return discordIcon()
+    case 'instagram':
+      return instaIcon()
+    case 'cognito':
+      return smsIcon()
+    default:
+      return smsIcon()
+  }
 }
 
 const columns: GridColDef[] = [
@@ -112,14 +112,16 @@ const columns: GridColDef[] = [
     headerName: 'Source',
     renderCell: ({ row }) => (
       <Typography sx={{ color: 'text.primary', display: 'flex' }}>
-      {row?.platform && (
-        <>
-          {renderIcon(row?.platform)}
-          <span style={{ marginRight: '8px' }} />
-        </>
-      )}
-      {row?.platform === 'cognito' ? 'Email/Phone' : row?.platform || '-'}
-    </Typography>
+        {
+          <>
+            {renderIcon(row?.platform)}
+            <span style={{ marginRight: '8px' }} />
+          </>
+        }
+        {row?.platform === 'cognito' || row?.verificationType === 'link' || row?.verificationType === 'otp'
+          ? 'Email/Phone'
+          : row?.platform || '-'}
+      </Typography>
     )
   },
   {
@@ -127,7 +129,9 @@ const columns: GridColDef[] = [
     minWidth: 130,
     field: 'loginCount',
     headerName: 'Login Count',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary',margin:'auto' }}>{row?.loginCount + 1 || '-'}</Typography>
+    renderCell: ({ row }) => (
+      <Typography sx={{ color: 'text.secondary', margin: 'auto' }}>{row?.loginCount + 1 || '-'}</Typography>
+    )
   },
   {
     flex: 0.1,
@@ -135,7 +139,6 @@ const columns: GridColDef[] = [
     field: 'lastLoginTime',
     headerName: 'Last Login',
     renderCell: ({ row }) => (
-
       <Typography sx={{ color: 'text.primary' }}>{new Date(row?.lastLoginTime).toLocaleString() || '-'}</Typography>
     )
   },
@@ -184,17 +187,17 @@ const AnalyticsProject = () => {
         ...(verified ? { verified: verified } : {}),
         ...(searchValue ? { searchText: searchValue } : {})
       })
-      const modifiedResponse = response.sort((a:any, b:any) => {
-        const dateA = new Date(a.createdAt || 0);
-        const dateB = new Date(b.createdAt || 0);
-        return dateB.getTime() - dateA.getTime();
-      });
-      
+      const modifiedResponse = response.sort((a: any, b: any) => {
+        const dateA = new Date(a.createdAt || 0)
+        const dateB = new Date(b.createdAt || 0)
+        return dateB.getTime() - dateA.getTime()
+      })
+
       if (startDate && endDate) {
         return modifiedResponse
       } else {
         setData(modifiedResponse)
-        return modifiedResponse;
+        return modifiedResponse
       }
     } catch (error) {
       console.error('Error fetching data:', error)
