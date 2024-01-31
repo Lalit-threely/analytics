@@ -30,6 +30,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import ApexSocialVsCognito from 'src/views/charts/apex-charts/ApexSocialVsCognito'
+import Typography from '@mui/material/Typography';
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
@@ -100,6 +101,14 @@ const AnalyticsDashboard = () => {
       </Button>
     </Box> */}
       <ApexChartWrapper>
+      <Typography
+      variant="h2"
+      component="div"
+      gutterBottom
+      style={{ textAlign: 'center', padding: '15px', backgroundColor: 'rgb(104 94 213)', color: '#fff',borderRadius:'20px',marginBottom:"20px" }}
+    >
+      User Analytics
+    </Typography>
         <KeenSliderWrapper>
           <Grid container spacing={6}>
             {/* <Grid item xs={12} lg={6}>
@@ -152,7 +161,7 @@ const AnalyticsDashboard = () => {
 
             {chartData && (
               <>
-                 <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                   <ApexSocialVsCognito cognitoVsSocialCount={(chartData as any)?.cognitoVsSocialCount} />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -192,9 +201,9 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} md={6} lg={4}>
             <AnalyticsSourceVisits />
           </Grid> */}
-            <Grid item xs={12} lg={12}>
+            {/* <Grid item xs={12} lg={12}>
               <AnalyticsProject />
-            </Grid>
+            </Grid> */}
             {/* <Grid item xs={12} lg={12}>
               <AnalyticsDroppedOffUsers />
             </Grid> */}

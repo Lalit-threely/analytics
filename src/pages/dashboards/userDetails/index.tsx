@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import AnalyticsProject from 'src/views/dashboards/analytics/AnalyticsProject'
 
-const CrmDashboard = () => {
+const userDetails= () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
@@ -17,4 +17,4 @@ const CrmDashboard = () => {
   )
 }
 
-export default CrmDashboard
+export default userDetails;
