@@ -120,7 +120,7 @@ const columns: GridColDef[] = [
         }
         {row?.platform === 'cognito' || row?.verificationType === 'link' || row?.verificationType === 'otp'
           ? 'Email/Phone'
-          : row?.platform || '-'}
+          : row?.platform?.charAt(0).toUpperCase() + row?.platform.slice(1) || '-'}
       </Typography>
     )
   },

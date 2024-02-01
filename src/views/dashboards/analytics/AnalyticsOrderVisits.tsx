@@ -38,7 +38,7 @@ const AnalyticsOrderVisits = () => {
 
   useEffect(() => {
     fetchData(defaultFilter)
-  }, [defaultFilter])
+  }, [])
 
   const handleOptionSelect = (option: string) => {
     console.log(option, "dddddd")
