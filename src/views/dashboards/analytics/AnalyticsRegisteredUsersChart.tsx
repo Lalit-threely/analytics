@@ -15,7 +15,11 @@ import { ApexOptions } from 'apexcharts'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 import { useAuth } from 'src/hooks/useAuth'
 
-const AnalyticsRegisteredUsersChart = () => {
+interface AnalyticsRegisteredUsersChartProps {
+  refreshKey: string
+}
+
+const AnalyticsRegisteredUsersChart: React.FC<AnalyticsRegisteredUsersChartProps> = ({ refreshKey }) => {
   const auth = useAuth()
   const theme = useTheme()
 
@@ -81,7 +85,12 @@ const AnalyticsRegisteredUsersChart = () => {
 
   useEffect(() => {
     fetchData(filter)
-  }, [])
+    const intervalId = setInterval(() => {
+      fetchData(filter)
+    }, 300000)
+
+    return () => clearInterval(intervalId)
+  }, [refreshKey])
 
   const fetchData = async (filter: any) => {
     setLoading(true)
@@ -91,36 +100,37 @@ const AnalyticsRegisteredUsersChart = () => {
         rangeType: filter,
         fromClientId: auth.clientId,
         resultCount: 7,
-        verified:true
+        verified: true
       })
 
       if (response.success) {
         let xCategories = []
         const data = response.data
 
-        const sortedData = data.sort((a: { from: string }, b: { from: string }) => new Date(a.from).getTime() - new Date(b.from).getTime());
-
+        const sortedData = data.sort(
+          (a: { from: string }, b: { from: string }) => new Date(a.from).getTime() - new Date(b.from).getTime()
+        )
 
         if (filter === 'Daily') {
-          xCategories = sortedData.map((item:any) => {
+          xCategories = sortedData.map((item: any) => {
             const formattedDate = format(new Date(item.from), 'dd-MM-yyyy')
 
             return formattedDate
           })
         }
         if (filter === 'Weekly') {
-          xCategories = sortedData.map((entry:any) => {
+          xCategories = sortedData.map((entry: any) => {
             const fromDate = new Date(entry.from)
             const toDate = new Date(entry.to)
-            const formattedRange = `${fromDate.getDate()+' '}${fromDate.toLocaleDateString('en', {
+            const formattedRange = `${fromDate.getDate() + ' '}${fromDate.toLocaleDateString('en', {
               month: 'short'
-            })}-${toDate.getDate()+' '}${toDate.toLocaleDateString('en', { month: 'short' })}`
+            })}-${toDate.getDate() + ' '}${toDate.toLocaleDateString('en', { month: 'short' })}`
 
             return formattedRange
           })
         }
         if (filter === 'Monthly') {
-          xCategories = sortedData.map((item:any) => {
+          xCategories = sortedData.map((item: any) => {
             const formattedMonth = format(new Date(item.from), 'MMM')
 
             return formattedMonth
@@ -128,14 +138,14 @@ const AnalyticsRegisteredUsersChart = () => {
         }
 
         if (filter === 'Yearly') {
-          xCategories = sortedData.map((item:any) => {
+          xCategories = sortedData.map((item: any) => {
             const formattedMonth = format(new Date(item.from), 'yyyy')
 
             return formattedMonth
           })
         }
 
-        const seriesData = sortedData.map((item:any) => item.count)
+        const seriesData = sortedData.map((item: any) => item.count)
 
         setCategories(xCategories)
 

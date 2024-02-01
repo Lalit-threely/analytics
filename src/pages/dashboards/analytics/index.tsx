@@ -1,6 +1,6 @@
 // ** MUI Import
 import Grid from '@mui/material/Grid'
-
+import RefreshIcon from '@mui/icons-material/Refresh'
 // ** Demo Component Imports
 import AnalyticsProject from 'src/views/dashboards/analytics/AnalyticsProject'
 import AnalyticsOrderVisits from 'src/views/dashboards/analytics/AnalyticsOrderVisits'
@@ -30,15 +30,18 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import ApexSocialVsCognito from 'src/views/charts/apex-charts/ApexSocialVsCognito'
+import Typography from '@mui/material/Typography'
+import { getCurrentTime } from 'src/@core/utils/helper-functions'
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
   const [chartData, setChartData] = useState()
-  const [cid, setCid] = useState<string>('')
+  const [refreshKey, setRefreshKey] = useState<any>(new Date())
+  const [loading, setLoading] = useState<boolean>(false)
   const auth = useAuth()
 
   const fetchData = async () => {
-    // setLoading(true)
+    setLoading(true)
 
     try {
       const response = await auth.getRegisteredOrVerifiedCount({
@@ -48,6 +51,8 @@ const AnalyticsDashboard = () => {
       setUserData(response)
     } catch (error) {
       console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -69,37 +74,48 @@ const AnalyticsDashboard = () => {
   useEffect(() => {
     fetchData()
     fetchChartData()
-  }, [])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCid(e.target.value)
+    const intervalId = setInterval(() => {
+      fetchData()
+      fetchChartData()
+    }, 300000)
+
+    return () => clearInterval(intervalId)
+  }, [refreshKey])
+
+  const handleRefreshClick = () => {
+    setRefreshKey(new Date())
   }
 
   return (
     <>
-      {/* <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="30vh" // Adjust the height to your preference
-    >
-      <TextField
-        value={cid}
-        label='Enter client id'
-        variant='outlined'
-        onChange={handleChange}
-        margin="normal"
-      />
-      <Button
-        variant="contained"
-        onClick={() => auth.setClientId(cid)}
-        style={{ marginTop: '10px' }} // Adjust margin as needed
-      >
-        Submit
-      </Button>
-    </Box> */}
+      <Box display='flex' flexDirection='column' alignItems='flex-end' justifyContent='flex-end' minHeight='2vh'>
+        <Button variant='outlined' onClick={handleRefreshClick} style={{ marginTop: '5px' }}>
+          <RefreshIcon style={{ marginRight: '8px' }} />
+          Refresh
+        </Button>
+        <Typography
+          variant='caption'
+          component='div'
+          gutterBottom
+          style={{
+            borderRadius: '1.2rem',
+            marginBottom: '.4rem',
+            marginTop: '.8rem'
+          }}
+        >
+          {`Last updated at ${getCurrentTime(refreshKey)}`}
+        </Typography>
+      </Box>
       <ApexChartWrapper>
+        <Typography
+          variant='h2'
+          component='div'
+          gutterBottom
+          style={{ padding: '15px', borderRadius: '20px', marginBottom: '20px' }}
+        >
+          User Analytics
+        </Typography>
         <KeenSliderWrapper>
           <Grid container spacing={6}>
             {/* <Grid item xs={12} lg={6}>
@@ -128,6 +144,7 @@ const AnalyticsDashboard = () => {
                   title='Total Registered Users'
                   // subtitle='Total count of users who have registered'
                   avatarIcon='tabler:chart-bar'
+                  loading={loading}
                 />
               </Grid>
 
@@ -142,17 +159,17 @@ const AnalyticsDashboard = () => {
                 />
               </Grid> */}
               <Grid item xs={12} sm={6} lg={6}>
-                <AnalyticsOrderVisits />
+                <AnalyticsOrderVisits refreshKey={refreshKey?.toLocaleString()} />
               </Grid>
             </Grid>
 
             <Grid item xs={12} lg={12}>
-              <AnalyticsRegisteredUsersChart />
+              <AnalyticsRegisteredUsersChart refreshKey={refreshKey?.toLocaleString()} />
             </Grid>
 
             {chartData && (
               <>
-                 <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                   <ApexSocialVsCognito cognitoVsSocialCount={(chartData as any)?.cognitoVsSocialCount} />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -192,9 +209,9 @@ const AnalyticsDashboard = () => {
           <Grid item xs={12} md={6} lg={4}>
             <AnalyticsSourceVisits />
           </Grid> */}
-            <Grid item xs={12} lg={12}>
+            {/* <Grid item xs={12} lg={12}>
               <AnalyticsProject />
-            </Grid>
+            </Grid> */}
             {/* <Grid item xs={12} lg={12}>
               <AnalyticsDroppedOffUsers />
             </Grid> */}

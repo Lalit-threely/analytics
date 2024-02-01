@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // ** Custom Component Import
 
@@ -33,6 +34,7 @@ import Button from '@mui/material/Button'
 import DialogTitle from '@mui/material/DialogTitle'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import useDebounce from 'src/hooks/useDebounce'
+import { discordIcon, googleIcon, instaIcon, smsIcon, xIcon } from 'src/@core/icons'
 
 // ** renders name column
 const renderName = (row: ProjectTableRowType) => {
@@ -51,6 +53,23 @@ const renderName = (row: ProjectTableRowType) => {
   }
 }
 
+const renderIcon = (platform: any) => {
+  switch (platform) {
+    case 'google':
+      return googleIcon()
+    case 'twitter':
+      return xIcon()
+    case 'discord':
+      return discordIcon()
+    case 'instagram':
+      return instaIcon()
+    case 'cognito':
+      return smsIcon()
+    default:
+      return smsIcon()
+  }
+}
+
 const columns: GridColDef[] = [
   {
     flex: 0.1,
@@ -62,7 +81,7 @@ const columns: GridColDef[] = [
   {
     flex: 0.1,
     field: 'name',
-    minWidth: 200,
+    minWidth: 170,
     headerName: 'Name',
     renderCell: ({ row }) => {
       const { name } = row
@@ -82,28 +101,38 @@ const columns: GridColDef[] = [
 
   {
     flex: 0.1,
-    minWidth: 250,
+    minWidth: 320,
     field: 'contactInformation',
     headerName: 'Contact Info',
     renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row?.contactInformation || '-'}</Typography>
   },
   {
     flex: 0.1,
-    minWidth: 120,
+    minWidth: 160,
     field: 'platform',
     headerName: 'Source',
     renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.primary' }}>
-        {row?.platform === 'cognito' || row?.verificationType==='link' || row?.verificationType==='otp' ? 'Email/Phone' : row?.platform || '-'}
+      <Typography sx={{ color: 'text.primary', display: 'flex' }}>
+        {
+          <>
+            {renderIcon(row?.platform)}
+            <span style={{ marginRight: '8px' }} />
+          </>
+        }
+        {row?.platform === 'cognito' || row?.verificationType === 'link' || row?.verificationType === 'otp'
+          ? 'Email/Phone'
+          : row?.platform?.charAt(0).toUpperCase() + row?.platform.slice(1) || '-'}
       </Typography>
     )
   },
   {
     flex: 0.1,
-    minWidth: 105,
+    minWidth: 130,
     field: 'loginCount',
     headerName: 'Login Count',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row?.loginCount + 1 || '-'}</Typography>
+    renderCell: ({ row }) => (
+      <Typography sx={{ color: 'text.secondary', margin: 'auto' }}>{row?.loginCount + 1 || '-'}</Typography>
+    )
   },
   {
     flex: 0.1,
@@ -125,7 +154,11 @@ const columns: GridColDef[] = [
   }
 ]
 
-const AnalyticsProject = () => {
+interface AnalyticsProjectProps {
+  refreshKey: string
+}
+
+const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
   // ** State
   const [data, setData] = useState([])
   const [value, setValue] = useState<string | null>('')
@@ -159,12 +192,17 @@ const AnalyticsProject = () => {
         ...(verified ? { verified: verified } : {}),
         ...(searchValue ? { searchText: searchValue } : {})
       })
+      const modifiedResponse = response.sort((a: any, b: any) => {
+        const dateA = new Date(a.createdAt || 0)
+        const dateB = new Date(b.createdAt || 0)
+        return dateB.getTime() - dateA.getTime()
+      })
 
       if (startDate && endDate) {
-        return response
+        return modifiedResponse
       } else {
-        setData(response)
-        return response
+        setData(modifiedResponse)
+        return modifiedResponse
       }
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -175,7 +213,13 @@ const AnalyticsProject = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+
+    const intervalId = setInterval(() => {
+      fetchData()
+    }, 300000)
+
+    return () => clearInterval(intervalId)
+  }, [refreshKey])
 
   useEffect(() => {
     async function fetchSearchedData() {
@@ -280,8 +324,8 @@ const AnalyticsProject = () => {
     <Grid>
       <Card>
         <CardHeader
-          title='Users'
-          titleTypographyProps={{ sx: { mb: [2, 0] } }}
+          title='User Details'
+          titleTypographyProps={{ style: { fontSize: '2rem' }, sx: { mb: [2, 0] } }}
           sx={{
             py: 4,
             flexDirection: ['column', 'row'],
@@ -303,21 +347,34 @@ const AnalyticsProject = () => {
             </Stack>
           }
         />
-        <DataGrid
-          autoHeight
-          pagination
-          rows={data}
-          rowHeight={62}
-          columns={columns}
-          // checkboxSelection
-          pageSizeOptions={[5, 10]}
-          disableRowSelectionOnClick
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          getRowId={getRowId}
+        {loading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '50rem'
+            }}
+          >
+            <CircularProgress color='success' size={60} />
+          </Box>
+        ) : (
+          <DataGrid
+            autoHeight
+            pagination
+            rows={data}
+            rowHeight={62}
+            columns={columns}
+            // checkboxSelection
+            pageSizeOptions={[5, 10]}
+            disableRowSelectionOnClick
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            getRowId={getRowId}
 
-          // slots={{ toolbar: GridToolbar }}
-        />
+            // slots={{ toolbar: GridToolbar }}
+          />
+        )}
       </Card>
       <Dialog fullWidth maxWidth='md' scroll='body' onClose={handleClose} open={open}>
         <DialogTitle
