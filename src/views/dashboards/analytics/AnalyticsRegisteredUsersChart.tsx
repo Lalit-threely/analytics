@@ -16,7 +16,7 @@ import ReactApexcharts from 'src/@core/components/react-apexcharts'
 import { useAuth } from 'src/hooks/useAuth'
 
 interface AnalyticsRegisteredUsersChartProps {
-  refreshKey: boolean
+  refreshKey: string
 }
 
 const AnalyticsRegisteredUsersChart: React.FC<AnalyticsRegisteredUsersChartProps> = ({ refreshKey }) => {

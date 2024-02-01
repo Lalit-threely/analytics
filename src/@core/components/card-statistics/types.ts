@@ -47,6 +47,7 @@ export type CardStatsVerticalProps = {
   avatarColor?: ThemeColor
   iconSize?: number | string
   chipColor?: ChipProps['color']
+  loading?: boolean
 }
 
 export type CardStatsHorizontalWithDetailsProps = {

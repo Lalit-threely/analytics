@@ -31,15 +31,17 @@ import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import ApexSocialVsCognito from 'src/views/charts/apex-charts/ApexSocialVsCognito'
 import Typography from '@mui/material/Typography'
+import { getCurrentTime } from 'src/@core/utils/helper-functions'
 
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
   const [chartData, setChartData] = useState()
-  const [refreshKey, setRefreshKey] = useState(false)
+  const [refreshKey, setRefreshKey] = useState<any>(new Date())
+  const [loading, setLoading] = useState<boolean>(false)
   const auth = useAuth()
 
   const fetchData = async () => {
-    // setLoading(true)
+    setLoading(true)
 
     try {
       const response = await auth.getRegisteredOrVerifiedCount({
@@ -49,6 +51,8 @@ const AnalyticsDashboard = () => {
       setUserData(response)
     } catch (error) {
       console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -80,22 +84,28 @@ const AnalyticsDashboard = () => {
   }, [refreshKey])
 
   const handleRefreshClick = () => {
-    setRefreshKey(prevValue => !prevValue)
+    setRefreshKey(new Date())
   }
 
   return (
     <>
-      <Box display='flex' flexDirection='row' alignItems='flex-end' justifyContent='flex-end' height='5vh'>
-        <Button
-          variant='outlined'
-          onClick={() => {
-            handleRefreshClick()
-          }}
-          style={{ marginTop: '10px' }}
-        >
+      <Box display='flex' flexDirection='column' alignItems='flex-end' justifyContent='flex-end' minHeight='2vh'>
+        <Button variant='outlined' onClick={handleRefreshClick} style={{ marginTop: '5px' }}>
           <RefreshIcon style={{ marginRight: '8px' }} />
           Refresh
         </Button>
+        <Typography
+          variant='caption'
+          component='div'
+          gutterBottom
+          style={{
+            borderRadius: '1.2rem',
+            marginBottom: '.4rem',
+            marginTop: '.8rem'
+          }}
+        >
+          {`Last updated at ${getCurrentTime(refreshKey)}`}
+        </Typography>
       </Box>
       <ApexChartWrapper>
         <Typography
@@ -134,6 +144,7 @@ const AnalyticsDashboard = () => {
                   title='Total Registered Users'
                   // subtitle='Total count of users who have registered'
                   avatarIcon='tabler:chart-bar'
+                  loading={loading}
                 />
               </Grid>
 
@@ -148,12 +159,12 @@ const AnalyticsDashboard = () => {
                 />
               </Grid> */}
               <Grid item xs={12} sm={6} lg={6}>
-                <AnalyticsOrderVisits refreshKey={refreshKey} />
+                <AnalyticsOrderVisits refreshKey={refreshKey?.toLocaleString()} />
               </Grid>
             </Grid>
 
             <Grid item xs={12} lg={12}>
-              <AnalyticsRegisteredUsersChart refreshKey={refreshKey} />
+              <AnalyticsRegisteredUsersChart refreshKey={refreshKey?.toLocaleString()} />
             </Grid>
 
             {chartData && (

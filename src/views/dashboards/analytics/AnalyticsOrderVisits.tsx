@@ -6,9 +6,11 @@ import CardContent from '@mui/material/CardContent'
 import OptionsMenu from 'src/@core/components/option-menu'
 import CardHeader from '@mui/material/CardHeader'
 import { useAuth } from 'src/hooks/useAuth'
+import { Skeleton } from '@mui/material'
+// import { SingleLine } from 'src/@core/components/loader/SingleLine'
 
 interface AnalyticsOrderVisitsProps {
-  refreshKey: boolean
+  refreshKey: string
 }
 
 const AnalyticsOrderVisits: React.FC<AnalyticsOrderVisitsProps> = ({ refreshKey }) => {
@@ -139,17 +141,23 @@ const AnalyticsOrderVisits: React.FC<AnalyticsOrderVisitsProps> = ({ refreshKey 
           sx={{ gap: 2, mb: 4.4, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', ml: 3 }}
         >
           <div>
-            <Typography variant='h2'>{userCount ?? '-'}</Typography>
+            {loading ? (
+              <Skeleton variant='text' sx={{ fontSize: '1rem', width: '4rem', minHeight: '2.7rem' }} />
+            ) : (
+              <Typography variant='h2'>{userCount ?? '-'}</Typography>
+            )}
           </div>
           <Typography
             variant='h2'
             sx={{ fontWeight: 500, color: percentageChange >= 0 ? 'success.main' : 'error.main' }}
           >
-            {loading
-              ? '-'
-              : percentageChange == null || percentageChange == 0
-              ? '-'
-              : `${percentageChange.toFixed(2)}%`}
+            {loading ? (
+              <Skeleton variant='text' sx={{ fontSize: '1rem', width: '4rem', minHeight: '2.7rem' }} />
+            ) : percentageChange == null || percentageChange === 0 ? (
+              '-'
+            ) : (
+              `${percentageChange.toFixed(2)}%`
+            )}
           </Typography>
         </Box>
       </CardContent>

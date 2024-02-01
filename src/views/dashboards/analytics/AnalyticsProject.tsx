@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // ** Custom Component Import
 
@@ -154,7 +155,7 @@ const columns: GridColDef[] = [
 ]
 
 interface AnalyticsProjectProps {
-  refreshKey: boolean
+  refreshKey: string
 }
 
 const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
@@ -324,7 +325,7 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
       <Card>
         <CardHeader
           title='User Details'
-          titleTypographyProps={{ sx: { mb: [2, 0] } }}
+          titleTypographyProps={{ style: { fontSize: '2rem' }, sx: { mb: [2, 0] } }}
           sx={{
             py: 4,
             flexDirection: ['column', 'row'],
@@ -346,21 +347,34 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
             </Stack>
           }
         />
-        <DataGrid
-          autoHeight
-          pagination
-          rows={data}
-          rowHeight={62}
-          columns={columns}
-          // checkboxSelection
-          pageSizeOptions={[5, 10]}
-          disableRowSelectionOnClick
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          getRowId={getRowId}
+        {loading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '50rem'
+            }}
+          >
+            <CircularProgress color='success' size={60} />
+          </Box>
+        ) : (
+          <DataGrid
+            autoHeight
+            pagination
+            rows={data}
+            rowHeight={62}
+            columns={columns}
+            // checkboxSelection
+            pageSizeOptions={[5, 10]}
+            disableRowSelectionOnClick
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            getRowId={getRowId}
 
-          // slots={{ toolbar: GridToolbar }}
-        />
+            // slots={{ toolbar: GridToolbar }}
+          />
+        )}
       </Card>
       <Dialog fullWidth maxWidth='md' scroll='body' onClose={handleClose} open={open}>
         <DialogTitle
