@@ -1,6 +1,6 @@
 // ** MUI Import
 import Grid from '@mui/material/Grid'
-
+import RefreshIcon from '@mui/icons-material/Refresh'
 // ** Demo Component Imports
 import AnalyticsProject from 'src/views/dashboards/analytics/AnalyticsProject'
 import AnalyticsOrderVisits from 'src/views/dashboards/analytics/AnalyticsOrderVisits'
@@ -35,7 +35,7 @@ import Typography from '@mui/material/Typography'
 const AnalyticsDashboard = () => {
   const [userData, setUserData] = useState<userData>()
   const [chartData, setChartData] = useState()
-  const [cid, setCid] = useState<string>('')
+  const [refreshKey, setRefreshKey] = useState(false)
   const auth = useAuth()
 
   const fetchData = async () => {
@@ -74,39 +74,29 @@ const AnalyticsDashboard = () => {
     const intervalId = setInterval(() => {
       fetchData()
       fetchChartData()
-    }, 60000)
+    }, 300000)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [refreshKey])
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCid(e.target.value)
+  const handleRefreshClick = () => {
+    setRefreshKey(prevValue => !prevValue)
   }
 
   return (
     <>
-      {/* <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="30vh" // Adjust the height to your preference
-    >
-      <TextField
-        value={cid}
-        label='Enter client id'
-        variant='outlined'
-        onChange={handleChange}
-        margin="normal"
-      />
-      <Button
-        variant="contained"
-        onClick={() => auth.setClientId(cid)}
-        style={{ marginTop: '10px' }} // Adjust margin as needed
-      >
-        Submit
-      </Button>
-    </Box> */}
+      <Box display='flex' flexDirection='row' alignItems='flex-end' justifyContent='flex-end' height='5vh'>
+        <Button
+          variant='outlined'
+          onClick={() => {
+            handleRefreshClick()
+          }}
+          style={{ marginTop: '10px' }}
+        >
+          <RefreshIcon style={{ marginRight: '8px' }} />
+          Refresh
+        </Button>
+      </Box>
       <ApexChartWrapper>
         <Typography
           variant='h2'
@@ -158,12 +148,12 @@ const AnalyticsDashboard = () => {
                 />
               </Grid> */}
               <Grid item xs={12} sm={6} lg={6}>
-                <AnalyticsOrderVisits />
+                <AnalyticsOrderVisits refreshKey={refreshKey} />
               </Grid>
             </Grid>
 
             <Grid item xs={12} lg={12}>
-              <AnalyticsRegisteredUsersChart />
+              <AnalyticsRegisteredUsersChart refreshKey={refreshKey} />
             </Grid>
 
             {chartData && (

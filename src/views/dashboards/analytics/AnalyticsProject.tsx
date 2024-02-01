@@ -153,7 +153,11 @@ const columns: GridColDef[] = [
   }
 ]
 
-const AnalyticsProject = () => {
+interface AnalyticsProjectProps {
+  refreshKey: boolean
+}
+
+const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
   // ** State
   const [data, setData] = useState([])
   const [value, setValue] = useState<string | null>('')
@@ -211,10 +215,10 @@ const AnalyticsProject = () => {
 
     const intervalId = setInterval(() => {
       fetchData()
-    }, 60000)
+    }, 300000)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [refreshKey])
 
   useEffect(() => {
     async function fetchSearchedData() {

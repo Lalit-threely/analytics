@@ -15,7 +15,11 @@ import { ApexOptions } from 'apexcharts'
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 import { useAuth } from 'src/hooks/useAuth'
 
-const AnalyticsRegisteredUsersChart = () => {
+interface AnalyticsRegisteredUsersChartProps {
+  refreshKey: boolean
+}
+
+const AnalyticsRegisteredUsersChart: React.FC<AnalyticsRegisteredUsersChartProps> = ({ refreshKey }) => {
   const auth = useAuth()
   const theme = useTheme()
 
@@ -83,10 +87,10 @@ const AnalyticsRegisteredUsersChart = () => {
     fetchData(filter)
     const intervalId = setInterval(() => {
       fetchData(filter)
-    }, 60000)
+    }, 300000)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [refreshKey])
 
   const fetchData = async (filter: any) => {
     setLoading(true)

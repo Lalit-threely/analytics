@@ -7,7 +7,11 @@ import OptionsMenu from 'src/@core/components/option-menu'
 import CardHeader from '@mui/material/CardHeader'
 import { useAuth } from 'src/hooks/useAuth'
 
-const AnalyticsOrderVisits = () => {
+interface AnalyticsOrderVisitsProps {
+  refreshKey: boolean
+}
+
+const AnalyticsOrderVisits: React.FC<AnalyticsOrderVisitsProps> = ({ refreshKey }) => {
   const auth = useAuth()
 
   const [defaultFilter, setDefaultFilter] = useState<string>('Daily')
@@ -40,10 +44,10 @@ const AnalyticsOrderVisits = () => {
     fetchData(defaultFilter)
     const intervalId = setInterval(() => {
       fetchData(defaultFilter)
-    }, 60000)
+    }, 300000)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [refreshKey])
 
   const handleOptionSelect = (option: string) => {
     setDefaultFilter(option)
