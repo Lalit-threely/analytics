@@ -85,7 +85,7 @@ const AnalyticsOrderVisits = () => {
     <Card>
       <CardHeader
         sx={{ pb: 0 }}
-        title={`New Registered Users ( ${timePeriod()} )`}
+        title={`New Registered Users (${timePeriod()})`}
         subheader={` `}
         action={
           <OptionsMenu

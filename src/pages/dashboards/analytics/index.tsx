@@ -105,7 +105,7 @@ const AnalyticsDashboard = () => {
       variant="h2"
       component="div"
       gutterBottom
-      style={{ textAlign: 'center', padding: '15px', backgroundColor: 'rgb(104 94 213)', color: '#fff',borderRadius:'20px',marginBottom:"20px" }}
+      style={{  padding: '15px',borderRadius:'20px',marginBottom:"20px" }}
     >
       User Analytics
     </Typography>

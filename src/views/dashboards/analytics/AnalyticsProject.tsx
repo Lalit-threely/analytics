@@ -313,7 +313,7 @@ const AnalyticsProject = () => {
     <Grid>
       <Card>
         <CardHeader
-          title='Users'
+          title='User Details'
           titleTypographyProps={{ sx: { mb: [2, 0] } }}
           sx={{
             py: 4,
