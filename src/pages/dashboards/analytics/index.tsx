@@ -89,7 +89,16 @@ const AnalyticsDashboard = () => {
 
   return (
     <>
-      <Box display='flex' flexDirection='column' alignItems='flex-end' justifyContent='flex-end' minHeight='2vh'>
+      <Box display='flex' flexDirection='row' alignItems='center' justifyContent='space-between' minHeight='2vh'>
+         <Typography
+          variant='h2'
+          component='div'
+          gutterBottom
+          style={{ padding: '15px', borderRadius: '20px', marginBottom: '20px' }}
+        >
+          User Analytics
+        </Typography>
+        <Box>
         <Button variant='outlined' onClick={handleRefreshClick} style={{ marginTop: '5px' }}>
           <RefreshIcon style={{ marginRight: '8px' }} />
           Refresh
@@ -106,16 +115,9 @@ const AnalyticsDashboard = () => {
         >
           {`Last updated at ${getCurrentTime(refreshKey)}`}
         </Typography>
+        </Box>
       </Box>
       <ApexChartWrapper>
-        <Typography
-          variant='h2'
-          component='div'
-          gutterBottom
-          style={{ padding: '15px', borderRadius: '20px', marginBottom: '20px' }}
-        >
-          User Analytics
-        </Typography>
         <KeenSliderWrapper>
           <Grid container spacing={6}>
             {/* <Grid item xs={12} lg={6}>
