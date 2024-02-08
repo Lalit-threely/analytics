@@ -206,6 +206,7 @@ const ForgotPassword = () => {
                     control={control}
                     rules={{ required: true }}
                     render={({ field: { value, onChange, onBlur } }) => (
+                      //@ts-ignore
                       <CustomTextField
                         fullWidth
                         value={value}
@@ -239,6 +240,7 @@ const ForgotPassword = () => {
                     control={control}
                     rules={{ required: true }}
                     render={({ field: { value, onChange, onBlur } }) => (
+                       //@ts-ignore
                       <CustomTextField
                         fullWidth
                         value={value}
