@@ -97,3 +97,10 @@ export const formatCVC = (value: string, cardNumber: string, Payment: PaymentTyp
 
   return clearValue.slice(0, maxLength)
 }
+
+// Function to validate email format
+export const validateEmail = (email:string) => {
+  // Regular expression for validating email format
+  const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+  return emailRegex.test(email);
+}

@@ -15,7 +15,7 @@ const navigation = (): VerticalNavItemsType => {
       badgeColor: 'error',
       path: '/dashboards/userDetails'
     }
-    // Add more items as needed
+// Add more items as needed
   ]
 }
 

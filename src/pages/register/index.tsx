@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useState } from 'react'
+import { useState, ReactNode, MouseEvent, useEffect } from 'react'
 
 // ** Next Import
 import Link from 'next/link'
@@ -22,14 +22,23 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
+// ** Third Party Imports
+import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Hooks
+import { useAuth } from 'src/hooks/useAuth'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
 // ** Styled Components
 const RegisterIllustration = styled('img')(({ theme }) => ({
@@ -58,6 +67,14 @@ const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
+const schema = yup.object().shape({
+  username: yup.string().required(),
+  companyName: yup.string().required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(5).required(),
+  confirmPassword: yup.string().required()
+})
+
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
   color: `${theme.palette.primary.main} !important`
@@ -74,16 +91,61 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 const Register = () => {
   // ** States
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
 
   // ** Hooks
+  const auth = useAuth()
   const theme = useTheme()
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
+  const router = useRouter()
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    getValues,
+    formState: { errors }
+  } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
+  })
 
   // ** Vars
   const { skin } = settings
 
   const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
+
+  console.log('control', control)
+  const Submit = async () => {
+    try {
+      console.log('clicked', getValues())
+      const { username, email, companyName, password, confirmPassword } = getValues();
+      if(password!==confirmPassword){
+        toast.error("Passwords are not matching");
+        return;
+      }
+      const res = await auth.handleSignUp({ username, email, companyName, password })
+      toast.success(res?.message)
+      router.push(`/verification?email=${email}&from=signup`)
+    } catch (err: any) {
+      console.log('errrr', err)
+      toast.error(err?.response?.data?.error || err?.response?.data?.message)
+    }
+  }
+
+  const socialLoginClicked=async(socialNetwork:string)=>{
+    console.log("clicked")
+    const call = await axios.get(
+      `${auth.baseURL}/api/v1/auth/oauth/${socialNetwork}?origin=${window?.origin}`
+    );
+    console.log("json", call?.data?.url);
+    const redirect_url = call?.data?.url;
+    // window.open(
+    //   redirect_url,
+    //   "_blank"
+    // );
+  }
 
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>
@@ -118,75 +180,165 @@ const Register = () => {
           }}
         >
           <Box sx={{ width: '100%', maxWidth: 400 }}>
-            <svg width={34} viewBox='0 0 32 22' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path
-                fillRule='evenodd'
-                clipRule='evenodd'
-                fill={theme.palette.primary.main}
-                d='M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z'
-              />
-              <path
-                fill='#161616'
-                opacity={0.06}
-                fillRule='evenodd'
-                clipRule='evenodd'
-                d='M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z'
-              />
-              <path
-                fill='#161616'
-                opacity={0.06}
-                fillRule='evenodd'
-                clipRule='evenodd'
-                d='M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z'
-              />
-              <path
-                fillRule='evenodd'
-                clipRule='evenodd'
-                fill={theme.palette.primary.main}
-                d='M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z'
-              />
-            </svg>
             <Box sx={{ my: 6 }}>
-              <Typography variant='h3' sx={{ mb: 1.5 }}>
-                Adventure starts here 🚀
+              <Typography variant='h3' sx={{ mb: 1.5, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <img src='https://svgshare.com/i/11sN.svg' alt='' height='40px' width='40px' /> Adventure starts here 🚀
               </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>Make your app management easy and fun!</Typography>
+              {/* <Typography sx={{ color: 'text.secondary' }}>Make your app management easy and fun!</Typography> */}
             </Box>
-            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-              <CustomTextField autoFocus fullWidth sx={{ mb: 4 }} label='Username' placeholder='johndoe' />
-              <CustomTextField fullWidth label='Email' sx={{ mb: 4 }} placeholder='user@email.com' />
-              <CustomTextField
-                fullWidth
-                label='Password'
-                id='auth-login-v2-password'
-                type={showPassword ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton
-                        edge='end'
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
-                      </IconButton>
-                    </InputAdornment>
-                  )
+            <form noValidate autoComplete='off'>
+              <Box sx={{ mb: 4 }}>
+                <Controller
+                  name='username'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    //@ts-ignore
+                    <CustomTextField
+                      fullWidth
+                      autoFocus
+                      label='Name'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      placeholder='John'
+                      variant='outlined'
+                      error={Boolean(errors.username)}
+                      {...(errors.username && { helperText: errors.username.message })}
+                    />
+                  )}
+                />
+              </Box>
+              <Box sx={{ mb: 4 }}>
+                <Controller
+                  name='companyName'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                     //@ts-ignore
+                    <CustomTextField
+                      fullWidth
+                      autoFocus
+                      label='Company Name'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      placeholder='Tria'
+                      variant='outlined'
+                      error={Boolean(errors.companyName)}
+                      {...(errors.companyName && { helperText: errors.companyName.message })}
+                    />
+                  )}
+                />
+              </Box>
+              <Box sx={{ mb: 4 }}>
+                <Controller
+                  name='email'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                     //@ts-ignore
+                    <CustomTextField
+                      fullWidth
+                      autoFocus
+                      label='Email'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      placeholder=''
+                      variant='outlined'
+                      error={Boolean(errors.email)}
+                      {...(errors.email && { helperText: errors.email.message })}
+                    />
+                  )}
+                />
+              </Box>
+              <Box sx={{ mb: 1.5 }}>
+                <Controller
+                  name='password'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                     //@ts-ignore
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      onBlur={onBlur}
+                      label='Password'
+                      onChange={onChange}
+                      id='auth-login-v4-password'
+                      error={Boolean(errors.password)}
+                      {...(errors.password && { helperText: errors.password.message })}
+                      type={showPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              edge='end'
+                              onMouseDown={e => e.preventDefault()}
+                              onClick={() => setShowPassword(!showPassword)}
+                            >
+                              <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              <Box sx={{ mb: 1.5 }}>
+                <Controller
+                  name='confirmPassword'
+                  control={control}
+                  rules={{ required: "Confirm Password is required" }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                     //@ts-ignore
+                    <CustomTextField
+                      fullWidth
+                      value={value}
+                      onBlur={onBlur}
+                      label='Confirm Password'
+                      onChange={onChange}
+                      id='auth-login-v-password'
+                      error={Boolean(errors.confirmPassword)}
+                      {...(errors.confirmPassword && { helperText: errors.confirmPassword.message })}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              edge='end'
+                              onMouseDown={e => e.preventDefault()}
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              <Icon fontSize='1.25rem' icon={showConfirmPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              <Box
+                sx={{
+                  mb: 1.75,
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
                 }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                sx={{ mb: 4, mt: 1.5, '& .MuiFormControlLabel-label': { fontSize: theme.typography.body2.fontSize } }}
-                label={
-                  <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <Typography sx={{ color: 'text.secondary' }}>I agree to</Typography>
-                    <Typography component={LinkStyled} href='/' onClick={e => e.preventDefault()} sx={{ ml: 1 }}>
-                      privacy policy & terms
-                    </Typography>
-                  </Box>
-                }
-              />
-              <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+              >
+                {/* <FormControlLabel
+                  label='Remember Me'
+                  control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
+                /> */}
+                {/* <Typography component={LinkStyled} href='/' onClick={e => e.preventDefault()} sx={{ ml: 1 }}>
+                  privacy policy & terms
+                </Typography> */}
+              </Box>
+              <Button fullWidth onClick={Submit} variant='contained' sx={{ mb: 4 }}>
                 Sign up
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -206,7 +358,7 @@ const Register = () => {
                 or
               </Divider>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
+                {/* <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
                   <Icon icon='mdi:facebook' />
                 </IconButton>
                 <IconButton href='/' component={Link} sx={{ color: '#1da1f2' }} onClick={e => e.preventDefault()}>
@@ -219,10 +371,10 @@ const Register = () => {
                   sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
                 >
                   <Icon icon='mdi:github' />
-                </IconButton>
-                <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
+                </IconButton> */}
+                <Box  sx={{ color: '#db4437',cursor:'pointer' }} onClick={() =>socialLoginClicked('google')}>
                   <Icon icon='mdi:google' />
-                </IconButton>
+                </Box>
               </Box>
             </form>
           </Box>

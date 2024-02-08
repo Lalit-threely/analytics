@@ -6,6 +6,23 @@ export type LoginParams = {
   rememberMe?: boolean
 }
 
+export type SignUpParams={
+email:string,
+password:string,
+username:string,
+companyName:string
+}
+
+export type ResetPasswordParams={
+  email:string
+}
+
+export type verifyOtpParams={
+  email:string | string[] | undefined,
+  code :string,
+  password:string
+}
+
 export type UserDataType = {
   id: number
   role: string
@@ -37,6 +54,7 @@ export type getUsers = {
 }
 
 export type AuthValuesType = {
+  baseURL:string,
   loading: boolean
   logout: () => void,
   clientId:string,
@@ -44,7 +62,10 @@ export type AuthValuesType = {
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
+  login: (params: LoginParams) =>  Promise<any>
+  handleSignUp: (params: SignUpParams) => Promise<any>
+  resetPassword: (params: ResetPasswordParams) => Promise<any>
+  verifyOtp: (params: verifyOtpParams) => Promise<any>
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
   getUsers: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>
