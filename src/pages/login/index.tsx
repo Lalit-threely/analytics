@@ -127,12 +127,17 @@ const LoginPage = () => {
     try {
       const { email, password } = data
       const resp = await auth.login({ email, password, rememberMe: true })
-      toast.success(resp?.message)
+      if(resp?.token){
+      toast.success("User Verified");
+      }
+      else{
+        toast.success(resp?.message);
+      }
       router.push(`/verification?email=${email}&from=signup`)
       console.log('resppp', resp)
     } catch (err: any) {
       console.log('errrr', err)
-      toast.error(err?.response?.data?.error)
+      toast.error(err?.response?.data?.error || err?.response?.data?.message)
     }
   }
 

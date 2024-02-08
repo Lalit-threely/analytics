@@ -183,9 +183,9 @@ const AuthProvider = ({ children }: Props) => {
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
       console.log('verified', response.data)
-      const { email, token, username, verified } = response.data
-      if (!verified) {
-        return response.data
+            const { email, token, username, verified } = response.data
+      if (!token) {
+        return response?.data;
       }
 
       params.rememberMe ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.token) : null
