@@ -169,6 +169,7 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
   const [startDate, setStartDate] = useState<any>(new Date().toISOString().split('T')[0]) // Set default value to today
   const [endDate, setEndDate] = useState<any>(new Date().toISOString().split('T')[0])
   const [verified, setVerified] = useState<boolean>(true)
+  const [totalCount, setTotalCount] = useState<number>(0)
 
   const debouncedSearch = useDebounce(value, 100)
 
@@ -181,33 +182,63 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
     setVerified(false)
   }
 
-  const fetchData = async (startDate = undefined, endDate = undefined, verified = true, searchValue = '') => {
+  const fetchData = async (
+    startDate = undefined,
+    endDate = undefined,
+    verified = true,
+    searchValue = '',
+    page = 0,
+    pageSize = 10
+  ) => {
     setLoading(true)
 
     try {
-      const response = await auth.getUsers({
+      const { data, count } = await auth.getUsers({
+        page,
+        pageSize,
         fromClientId: auth.clientId,
         ...(startDate ? { from: startDate } : {}),
         ...(endDate ? { to: endDate } : {}),
         ...(verified ? { verified: verified } : {}),
         ...(searchValue ? { searchText: searchValue } : {})
       })
-      const modifiedResponse = response.sort((a: any, b: any) => {
-        const dateA = new Date(a.createdAt || 0)
-        const dateB = new Date(b.createdAt || 0)
-        return dateB.getTime() - dateA.getTime()
-      })
+      // const modifiedResponse = data.sort((a: any, b: any) => {
+      //   const dateA = new Date(a.createdAt || 0)
+      //   const dateB = new Date(b.createdAt || 0)
+      //   return dateB.getTime() - dateA.getTime()
+      // })
+
+      setTotalCount(count)
 
       if (startDate && endDate) {
-        return modifiedResponse
+        return data
       } else {
-        setData(modifiedResponse)
-        return modifiedResponse
+        setData(data)
+        return data
       }
     } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchCsvData = async (startDate: any, endDate: any, verified = true) => {
+    try {
+      const response = await auth.getUsersByRange({
+        fromClientId: auth.clientId,
+        ...(startDate ? { from: startDate } : {}),
+        ...(endDate ? { to: endDate } : {}),
+        ...(verified ? { verified: verified } : {})
+      })
+      const modifiedResponse = response.sort((a: any, b: any) => {
+        const dateA = new Date(a.createdAt || 0)
+        const dateB = new Date(b.createdAt || 0)
+        return dateB.getTime() - dateA.getTime()
+      })
+      return modifiedResponse
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
   }
 
@@ -222,19 +253,8 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
   }, [refreshKey])
 
   useEffect(() => {
-    async function fetchSearchedData() {
-      const data = await fetchData(undefined, undefined, undefined, debouncedSearch)
-
-      const filteredData = data.filter((item: any) => {
-        const contactMatch = new RegExp(debouncedSearch, 'i').test(item.contactInformation)
-        const triaNameMatch = new RegExp(debouncedSearch, 'i').test(item.triaName)
-
-        return contactMatch || triaNameMatch
-      })
-      setData(filteredData)
-    }
-    if (debouncedSearch) fetchSearchedData()
-  }, [debouncedSearch])
+    fetchData(undefined, undefined, undefined, debouncedSearch, paginationModel.page, paginationModel.pageSize)
+  }, [debouncedSearch, paginationModel.page, paginationModel.pageSize])
 
   useEffect(() => {
     const currentDate = new Date()
@@ -270,7 +290,7 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
       return
     }
     console.log(startDate, 'this is start date')
-    const res = await fetchData(startDate, endDate, verified)
+    const res = await fetchCsvData(startDate, endDate, verified)
 
     const csvHeaders = [
       'Name',
@@ -365,6 +385,7 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
             rows={data}
             rowHeight={62}
             columns={columns}
+            rowCount={totalCount}
             // checkboxSelection
             pageSizeOptions={[5, 10]}
             disableRowSelectionOnClick

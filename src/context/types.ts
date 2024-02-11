@@ -40,7 +40,7 @@ export type newUserRegisters = {
   to?: string
   resultCount?: number
   source?: string
-  verified?:boolean
+  verified?: boolean
 }
 
 export type getUsers = {
@@ -51,13 +51,15 @@ export type getUsers = {
   source?: string
   verified?: boolean
   rangeType?: string
+  page?: number
+  pageSize?: number
 }
 
 export type AuthValuesType = {
   baseURL:string,
   loading: boolean
-  logout: () => void,
-  clientId:string,
+  logout: () => void
+  clientId: string
   setClientId: (clientId: string) => void
   user: UserDataType | null
   setLoading: (value: boolean) => void
@@ -68,6 +70,7 @@ export type AuthValuesType = {
   verifyOtp: (params: verifyOtpParams) => Promise<any>
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
   getUsers: (params: getUsers) => Promise<any>
+  getUsersByRange: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>
   getRegisteredOrVerifiedCount: (params: getUsers) => Promise<any>
   getGroupedDataOfCharts: (params: getUsers) => Promise<any>
