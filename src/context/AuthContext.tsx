@@ -45,6 +45,7 @@ const defaultProvider: AuthValuesType = {
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
   getUsers: () => Promise.resolve(),
+  getUsersByRange: () => Promise.resolve(),
   getActiveUsers: () => Promise.resolve(),
   getRegisteredOrVerifiedCount: () => Promise.resolve(),
   getGroupedDataOfCharts: () => Promise.resolve(),
@@ -393,6 +394,28 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
+  const getUsersByRange = async (params: getUsers) => {
+    try {
+      // Replace 'API_URL' with your actual API endpoint
+      const apiUrl = `${baseURL}/api/v2/analtyics/getUsersByRange`
+
+      // Making the POST request using Axios
+      const response = await axios.post(apiUrl, params)
+
+      // Handling the response data
+      console.log('Response Data:', response.data)
+
+      // You can return the response data or perform other actions based on your requirements
+      return response.data
+    } catch (error) {
+      // Handling errors
+      console.error('Error making POST request:', error)
+
+      // You can throw the error or handle it in another way based on your requirements
+      throw error
+    }
+  }
+
   const getActiveUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
@@ -527,7 +550,8 @@ const AuthProvider = ({ children }: Props) => {
     getGroupedDataOfCharts,
     saveProjectDetails,
     getProjectsData,
-    deleteProject
+    deleteProject,
+    getUsersByRange
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

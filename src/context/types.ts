@@ -56,6 +56,9 @@ export type getUsers = {
   source?: string
   verified?: boolean
   rangeType?: string
+  page?: number
+  pageSize?: number
+  fromClientId: string | undefined
 }
 
 export type projectDetails = {
@@ -78,6 +81,7 @@ export type AuthValuesType = {
   AdminOauth: (params: AdminOauth) => Promise<any>
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
   getUsers: (params: getUsers) => Promise<any>
+  getUsersByRange: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>
   getRegisteredOrVerifiedCount: (params: getUsers) => Promise<any>
   getGroupedDataOfCharts: (params: getUsers) => Promise<any>
