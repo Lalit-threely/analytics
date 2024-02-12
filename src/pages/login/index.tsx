@@ -145,7 +145,7 @@ const LoginPage = () => {
   const socialLoginClicked=async(socialNetwork:string)=>{
     console.log("clicked")
     const call = await axios.get(
-      `${auth.baseURL}/api/v1/auth/oauth/${socialNetwork}?origin=${window?.origin}`
+      `${auth.baseURL}/api/v1/auth/admin/oauth/${socialNetwork}?origin=${window?.origin}`
     );
     console.log("json", call?.data?.url);
     const redirect_url = call?.data?.url;
