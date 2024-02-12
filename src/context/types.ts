@@ -17,6 +17,12 @@ export type ResetPasswordParams={
   email:string
 }
 
+export type AdminOauth={
+  code:string,
+  scope:string
+
+}
+
 export type verifyOtpParams={
   email:string | string[] | undefined,
   code :string,
@@ -26,10 +32,10 @@ export type verifyOtpParams={
 export type UserDataType = {
   id: number
   role: string
-  email: string
-  fullName: string
+  email?: string
+  fullName?: string
   username: string
-  password: string
+  password?: string
   avatar?: string | null
 }
 
@@ -66,6 +72,7 @@ export type AuthValuesType = {
   handleSignUp: (params: SignUpParams) => Promise<any>
   resetPassword: (params: ResetPasswordParams) => Promise<any>
   verifyOtp: (params: verifyOtpParams) => Promise<any>
+  AdminOauth: (params: AdminOauth) => Promise<any>
   getNewRegisteredUsers: (params: newUserRegisters) => Promise<any>
   getUsers: (params: getUsers) => Promise<any>
   getActiveUsers: (params: getUsers) => Promise<any>

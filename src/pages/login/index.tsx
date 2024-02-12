@@ -43,6 +43,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 // ** Styled Components
 const LoginIllustration = styled('img')(({ theme }) => ({
@@ -141,9 +142,19 @@ const LoginPage = () => {
     }
   }
 
-  // useEffect(()=>{
-  //   onSubmit();
-  // },[])
+  const socialLoginClicked=async(socialNetwork:string)=>{
+    console.log("clicked")
+    const call = await axios.get(
+      `${auth.baseURL}/api/v1/auth/oauth/${socialNetwork}?origin=${window?.origin}`
+    );
+    console.log("json", call?.data?.url);
+    const redirect_url = call?.data?.url;
+    // setTimeout(() => {
+    //   window.close()
+    // }, 500)
+    window.open(redirect_url, '_self'); 
+  }
+
 
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
@@ -312,14 +323,9 @@ const LoginPage = () => {
                 >
                   <Icon icon='mdi:github' />
                 </IconButton> */}
-                <IconButton
-                  href='/'
-                  component={Link}
-                  sx={{ color: '#db4437' }}
-                  onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
-                >
+                 <Box  sx={{ color: '#db4437',cursor:'pointer' }} onClick={() =>socialLoginClicked('google')}>
                   <Icon icon='mdi:google' />
-                </IconButton>
+                </Box>
               </Box>
             </form>
           </Box>

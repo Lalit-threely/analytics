@@ -20,12 +20,13 @@ import {
   getUsers,
   SignUpParams,
   ResetPasswordParams,
-  verifyOtpParams
+  verifyOtpParams,
+  AdminOauth
 } from './types'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
-  baseURL:"",
+  baseURL: '',
   user: null,
   loading: false,
   setUser: () => null,
@@ -36,6 +37,7 @@ const defaultProvider: AuthValuesType = {
   handleSignUp: () => Promise.resolve(),
   resetPassword: () => Promise.resolve(),
   verifyOtp: () => Promise.resolve(),
+  AdminOauth: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   getNewRegisteredUsers: () => Promise.resolve(),
   getUsers: () => Promise.resolve(),
@@ -125,9 +127,16 @@ const AuthProvider = ({ children }: Props) => {
         // .then(async response => {
         // setLoading(false)
         const userData = localStorage.getItem('userData') || ''
-        const parsedUser = JSON.parse(userData)
-        console.log('response.data.userData', parsedUser)
-        setUser(parsedUser)
+        let parsedUser
+
+        try {
+          parsedUser = JSON.parse(userData)
+          setUser(parsedUser)
+        } catch (error) {
+          // Handle the error, such as setting parsedUser to an empty object
+          console.error('Error parsing user data:', error)
+        }
+
         // })
         // .catch(() => {
         // localStorage.removeItem('userData')
@@ -158,6 +167,32 @@ const AuthProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const storeToken = async (response:any) => {
+    window.localStorage.setItem(authConfig.storageTokenKeyName, response.data?.token);
+    const { id, token, username, verified } = response.data;
+    setUser({
+      role: 'admin',
+      id: id,
+      username: username,
+      password: ''
+    })
+     window.localStorage.setItem(
+          'userData',
+          JSON.stringify({
+            role: 'admin',
+            id: id,
+            username: username,
+            password: ''
+          })
+        );
+        // window.close();
+        // if (window.opener) {
+        //   // Perform any necessary actions in the parent window/tab
+        //   window.opener.postMessage({ type: 'oauth_success', token }, '*');
+        // }
+    router.replace('/dashboards/analytics');
+  }
+
   const handleSignUp = async (params: SignUpParams) => {
     try {
       const apiUrl = `${baseURL}/api/v2/auth/admin/initiate`
@@ -183,34 +218,13 @@ const AuthProvider = ({ children }: Props) => {
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
       console.log('verified', response.data)
-            const { email, token, username, verified } = response.data
+      const {token} = response.data
       if (!token) {
-        return response?.data;
+        return response?.data
+      } else {
+        storeToken(response)
       }
 
-      params.rememberMe ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.token) : null
-
-      setUser({
-        id: 1,
-        role: 'admin',
-        email: email,
-        fullName: '',
-        username: '',
-        password: ''
-      })
-      params.rememberMe
-        ? window.localStorage.setItem(
-            'userData',
-            JSON.stringify({
-              id: 1,
-              role: 'admin',
-              fullName: '',
-              username: username,
-              email: email
-            })
-          )
-        : null
-      router.replace('/dashboards/analytics')
       // Handling the response data
       console.log('Response Data:', response.data)
 
@@ -250,28 +264,30 @@ const AuthProvider = ({ children }: Props) => {
       console.log('Response Data:', response)
 
       if (token) {
-        window.localStorage.setItem(authConfig.storageTokenKeyName, token)
-        setUser({
-          id: 1,
-          role: 'admin',
-          email: email,
-          fullName: '',
-          username: '',
-          password: ''
-        })
-
-        window.localStorage.setItem(
-          'userData',
-          JSON.stringify({
-            id: 1,
-            role: 'admin',
-            fullName: '',
-            username: username,
-            email: email
-          })
-        )
-        router.replace('/dashboards/analytics')
+        storeToken(response);
       }
+      return response.data
+    } catch (err) {
+      console.log('error', err)
+      throw err
+    }
+  }
+
+  const AdminOauth = async (params: AdminOauth) => {
+    try {
+      const response = await axios.get(
+        `${baseURL}/api/v2/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
+      )
+
+      const { id, username, token } = response.data
+
+      if (token) {
+        storeToken(response);
+      }
+
+      // Handling the response data
+      console.log('Response Data:', response)
+
       // You can return the response data or perform other actions based on your requirements
       return response.data
     } catch (err) {
@@ -279,6 +295,7 @@ const AuthProvider = ({ children }: Props) => {
       throw err
     }
   }
+
   // axios
   //   .post(authConfig.loginEndpoint, params)
   //   .then(async response => {
@@ -439,6 +456,7 @@ const AuthProvider = ({ children }: Props) => {
     handleSignUp,
     resetPassword,
     verifyOtp,
+    AdminOauth,
     logout: handleLogout,
     getNewRegisteredUsers,
     getUsers,

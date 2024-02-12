@@ -145,6 +145,7 @@ const Register = () => {
     //   redirect_url,
     //   "_blank"
     // );
+    window.open(redirect_url, '_self');
   }
 
   return (
