@@ -72,7 +72,7 @@ const schema = yup.object().shape({
   companyName: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().min(5).required(),
-  confirmPassword: yup.string().required()
+  confirmPassword: yup.string().min(5).required()
 })
 
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -107,7 +107,7 @@ const Register = () => {
     getValues,
     formState: { errors }
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
   })
 
@@ -117,7 +117,7 @@ const Register = () => {
   const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
 
   console.log('control', control)
-  const Submit = async () => {
+  const onSubmit = async () => {
     try {
       console.log('clicked', getValues())
       const { username, email, companyName, password, confirmPassword } = getValues();
@@ -187,7 +187,7 @@ const Register = () => {
               </Typography>
               {/* <Typography sx={{ color: 'text.secondary' }}>Make your app management easy and fun!</Typography> */}
             </Box>
-            <form noValidate autoComplete='off'>
+            <form noValidate autoComplete='off'onSubmit={handleSubmit(onSubmit)}>
               <Box sx={{ mb: 4 }}>
                 <Controller
                   name='username'
@@ -198,7 +198,7 @@ const Register = () => {
                     <CustomTextField
                       fullWidth
                       autoFocus
-                      label='Name'
+                      label='Username'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
@@ -219,7 +219,7 @@ const Register = () => {
                      //@ts-ignore
                     <CustomTextField
                       fullWidth
-                      autoFocus
+                      // autoFocus
                       label='Company Name'
                       value={value}
                       onBlur={onBlur}
@@ -241,7 +241,7 @@ const Register = () => {
                      //@ts-ignore
                     <CustomTextField
                       fullWidth
-                      autoFocus
+                      // autoFocus
                       label='Email'
                       value={value}
                       onBlur={onBlur}
@@ -318,6 +318,10 @@ const Register = () => {
                           </InputAdornment>
                         )
                       }}
+                      onPaste={e => {
+                        e.preventDefault(); // Prevent paste action
+                        toast.error("Pasting into Confirm Password field is not allowed.");
+                      }}
                     />
                   )}
                 />
@@ -339,7 +343,7 @@ const Register = () => {
                   privacy policy & terms
                 </Typography> */}
               </Box>
-              <Button fullWidth onClick={Submit} variant='contained' sx={{ mb: 4 }}>
+              <Button fullWidth type='submit'  variant='contained' sx={{ mb: 4 }}>
                 Sign up
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>

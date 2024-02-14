@@ -120,7 +120,7 @@ const LoginPage = () => {
     formState: { errors }
   } = useForm({
     // defaultValues,
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
   })
 
@@ -219,7 +219,7 @@ const LoginPage = () => {
                       autoFocus
                       label='Email'
                       value={value}
-                      onBlur={onBlur}
+                      // onBlur={onBlur}
                       onChange={onChange}
                       placeholder='admin@tria.com'
                       error={Boolean(errors.email)}
@@ -238,7 +238,7 @@ const LoginPage = () => {
                     <CustomTextField
                       fullWidth
                       value={value}
-                      onBlur={onBlur}
+                      // onBlur={onBlur}
                       label='Password'
                       onChange={onChange}
                       id='auth-login-v2-password'
