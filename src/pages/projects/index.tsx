@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import AddProject from 'src/views/projects/addProject'
 import ProjectData from 'src/views/projects/projectsData'
 import { CircularProgress } from '@mui/material'
+import Link from 'next/link'
 
 const AddProjects = () => {
   const [projectData, setProjectData] = useState<any>([])
@@ -71,6 +72,7 @@ const AddProjects = () => {
           // Mapping over projectData to render ProjectData components
           projectData.map((project: any, index: any) => (
             <Grid key={index} item md={3} sm={4} xs={12}>
+           
               <ProjectData
                 project={project} // Pass down project data as props to ProjectData component
               />

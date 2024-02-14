@@ -19,7 +19,7 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Add Projects',
       icon: 'tabler:plus',
       badgeColor: 'error',
-      path: '/projects/addProjects'
+      path: '/projects/'
     }
 
     // Add more items as needed

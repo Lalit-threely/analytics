@@ -18,6 +18,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import { useTheme } from '@mui/material/styles'
 import { Divider } from '@mui/material'
+import Link from 'next/link'
 
 interface Project {
   apiSecret: string
@@ -52,7 +53,9 @@ const ProjectData: React.FC<{ project: Project }> = ({ project }) => {
         <Typography variant='body1'>{project.projectName}</Typography>
 
         <Divider sx={{ width: '80%' }} />
+        <Link href={{ pathname: `/projects/${project.projectId}`, query: { projectData: JSON.stringify(project) }}} as={`/projects/${project.projectId}`}>
         <Button variant='contained'>Get Started</Button>
+        </Link>
       </CardContent>
     </Card>
   )
