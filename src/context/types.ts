@@ -6,27 +6,26 @@ export type LoginParams = {
   rememberMe?: boolean
 }
 
-export type SignUpParams={
-email:string,
-password:string,
-username:string,
-companyName:string
+export type SignUpParams = {
+  email: string
+  password: string
+  username: string
+  companyName: string
 }
 
-export type ResetPasswordParams={
-  email:string
+export type ResetPasswordParams = {
+  email: string
 }
 
-export type AdminOauth={
-  code:string,
-  scope:string
-
+export type AdminOauth = {
+  code: string
+  scope: string
 }
 
-export type verifyOtpParams={
-  email:string | string[] | undefined,
-  code :string,
-  password:string
+export type verifyOtpParams = {
+  email: string | string[] | undefined
+  code: string
+  password: string
 }
 
 export type UserDataType = {
@@ -46,7 +45,7 @@ export type newUserRegisters = {
   to?: string
   resultCount?: number
   source?: string
-  verified?:boolean
+  verified?: boolean
 }
 
 export type getUsers = {
@@ -59,16 +58,20 @@ export type getUsers = {
   rangeType?: string
 }
 
+export type projectDetails = {
+  projectName?: string
+}
+
 export type AuthValuesType = {
-  baseURL:string,
+  baseURL: string
   loading: boolean
-  logout: () => void,
-  clientId:string,
+  logout: () => void
+  clientId: string
   setClientId: (clientId: string) => void
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
-  login: (params: LoginParams) =>  Promise<any>
+  login: (params: LoginParams) => Promise<any>
   handleSignUp: (params: SignUpParams) => Promise<any>
   resetPassword: (params: ResetPasswordParams) => Promise<any>
   verifyOtp: (params: verifyOtpParams) => Promise<any>
@@ -78,4 +81,6 @@ export type AuthValuesType = {
   getActiveUsers: (params: getUsers) => Promise<any>
   getRegisteredOrVerifiedCount: (params: getUsers) => Promise<any>
   getGroupedDataOfCharts: (params: getUsers) => Promise<any>
+  saveProjectDetails: (params: projectDetails) => Promise<any>
+  getProjectsData: (params: projectDetails) => Promise<any>
 }

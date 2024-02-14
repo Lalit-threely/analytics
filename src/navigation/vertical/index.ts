@@ -14,8 +14,15 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:user',
       badgeColor: 'error',
       path: '/dashboards/userDetails'
+    },
+    {
+      title: 'Add Projects',
+      icon: 'tabler:plus',
+      badgeColor: 'error',
+      path: '/projects/addProjects'
     }
-// Add more items as needed
+
+    // Add more items as needed
   ]
 }
 
