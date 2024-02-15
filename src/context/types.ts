@@ -83,4 +83,5 @@ export type AuthValuesType = {
   getGroupedDataOfCharts: (params: getUsers) => Promise<any>
   saveProjectDetails: (params: projectDetails) => Promise<any>
   getProjectsData: (params: projectDetails) => Promise<any>
+  deleteProject: (params: string) => Promise<any>
 }

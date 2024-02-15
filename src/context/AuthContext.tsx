@@ -46,7 +46,8 @@ const defaultProvider: AuthValuesType = {
   getRegisteredOrVerifiedCount: () => Promise.resolve(),
   getGroupedDataOfCharts: () => Promise.resolve(),
   saveProjectDetails: () => Promise.resolve(),
-  getProjectsData: () => Promise.resolve()
+  getProjectsData: () => Promise.resolve(),
+  deleteProject: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -484,6 +485,26 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
+  const deleteProject = async (projectId: string) => {
+    try {
+      const apiUrl = `${baseURL}/api/v2/auth/delete-project/${projectId}`
+      const token = window.localStorage.getItem('accessToken')
+
+      const response = await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log('Response Data:', response.data)
+
+      return response.data
+    } catch (error) {
+      console.error('Error making DELETE request:', error)
+      throw error
+    }
+  }
+
   const values = {
     baseURL,
     user,
@@ -504,7 +525,8 @@ const AuthProvider = ({ children }: Props) => {
     getRegisteredOrVerifiedCount,
     getGroupedDataOfCharts,
     saveProjectDetails,
-    getProjectsData
+    getProjectsData,
+    deleteProject
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
