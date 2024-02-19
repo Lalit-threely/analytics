@@ -157,7 +157,7 @@ const projectDetails = () => {
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '5rem', marginBottom: '1rem' }}>
             <Typography variant='body1' sx={{ width: '12rem' }}>
-              Client Key
+              Client ID
             </Typography>
             <TextField
               variant='outlined'
@@ -176,7 +176,7 @@ const projectDetails = () => {
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '5rem', marginBottom: '1rem' }}>
             <Typography variant='body1' sx={{ width: '12rem' }}>
-              Server Key
+              Client Secret
             </Typography>
             <TextField
               variant='outlined'
