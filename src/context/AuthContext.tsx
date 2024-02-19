@@ -21,7 +21,8 @@ import {
   SignUpParams,
   ResetPasswordParams,
   verifyOtpParams,
-  AdminOauth
+  AdminOauth,
+  projectDetails
 } from './types'
 
 // ** Defaults
@@ -43,7 +44,10 @@ const defaultProvider: AuthValuesType = {
   getUsers: () => Promise.resolve(),
   getActiveUsers: () => Promise.resolve(),
   getRegisteredOrVerifiedCount: () => Promise.resolve(),
-  getGroupedDataOfCharts: () => Promise.resolve()
+  getGroupedDataOfCharts: () => Promise.resolve(),
+  saveProjectDetails: () => Promise.resolve(),
+  getProjectsData: () => Promise.resolve(),
+  deleteProject: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -167,30 +171,30 @@ const AuthProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const storeToken = async (response:any) => {
-    window.localStorage.setItem(authConfig.storageTokenKeyName, response.data?.token);
-    const { id, token, username, verified } = response.data;
+  const storeToken = async (response: any) => {
+    window.localStorage.setItem(authConfig.storageTokenKeyName, response.data?.token)
+    const { id, token, username, verified } = response.data
     setUser({
       role: 'admin',
       id: id,
       username: username,
       password: ''
     })
-     window.localStorage.setItem(
-          'userData',
-          JSON.stringify({
-            role: 'admin',
-            id: id,
-            username: username,
-            password: ''
-          })
-        );
-        // window.close();
-        // if (window.opener) {
-        //   // Perform any necessary actions in the parent window/tab
-        //   window.opener.postMessage({ type: 'oauth_success', token }, '*');
-        // }
-    router.replace('/dashboards/analytics');
+    window.localStorage.setItem(
+      'userData',
+      JSON.stringify({
+        role: 'admin',
+        id: id,
+        username: username,
+        password: ''
+      })
+    )
+    // window.close();
+    // if (window.opener) {
+    //   // Perform any necessary actions in the parent window/tab
+    //   window.opener.postMessage({ type: 'oauth_success', token }, '*');
+    // }
+    router.replace('/dashboards/analytics')
   }
 
   const handleSignUp = async (params: SignUpParams) => {
@@ -218,7 +222,7 @@ const AuthProvider = ({ children }: Props) => {
       // Making the POST request using Axios
       const response = await axios.post(apiUrl, params)
       console.log('verified', response.data)
-      const {token} = response.data
+      const { token } = response.data
       if (!token) {
         return response?.data
       } else {
@@ -264,7 +268,7 @@ const AuthProvider = ({ children }: Props) => {
       console.log('Response Data:', response)
 
       if (token) {
-        storeToken(response);
+        storeToken(response)
       }
       return response.data
     } catch (err) {
@@ -282,7 +286,7 @@ const AuthProvider = ({ children }: Props) => {
       const { id, username, token } = response.data
 
       if (token) {
-        storeToken(response);
+        storeToken(response)
       }
 
       // Handling the response data
@@ -444,6 +448,63 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
+  const saveProjectDetails = async (projectDetails: projectDetails) => {
+    try {
+      const token = window.localStorage.getItem('accessToken')
+
+      const response = await axios.post(`${baseURL}/api/v2/auth/create-project`, projectDetails, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      console.log('Project details saved:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error saving project details:', error)
+      throw error
+    }
+  }
+
+  const getProjectsData = async () => {
+    try {
+      const apiUrl = `${baseURL}/api/v2/auth/get-projects`
+      const token = window.localStorage.getItem('accessToken')
+
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log('Response Data:', response.data)
+
+      return response.data
+    } catch (error) {
+      console.error('Error making POST request:', error)
+      throw error
+    }
+  }
+
+  const deleteProject = async (projectId: string) => {
+    try {
+      const apiUrl = `${baseURL}/api/v2/auth/delete-project/${projectId}`
+      const token = window.localStorage.getItem('accessToken')
+
+      const response = await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log('Response Data:', response.data)
+
+      return response.data
+    } catch (error) {
+      console.error('Error making DELETE request:', error)
+      throw error
+    }
+  }
+
   const values = {
     baseURL,
     user,
@@ -462,7 +523,10 @@ const AuthProvider = ({ children }: Props) => {
     getUsers,
     getActiveUsers,
     getRegisteredOrVerifiedCount,
-    getGroupedDataOfCharts
+    getGroupedDataOfCharts,
+    saveProjectDetails,
+    getProjectsData,
+    deleteProject
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
