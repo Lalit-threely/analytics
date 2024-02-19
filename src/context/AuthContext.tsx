@@ -62,11 +62,11 @@ const AuthProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
   const [clientId, setClientId] = useState<string>('5180b8cc-57d7-4472-9916-21ab42e67108')
-  // const baseURL = 'https://staging.tria.so'
+  const baseURL = 'https://staging.tria.so'
 
   // const [clientId, setClientId] = useState<string>('b48d8230-57f9-43fb-a952-722668bb3520')
   // const baseURL = 'https://prod.tria.so'
-  const baseURL = 'http://localhost:8000'
+  // const baseURL = 'http://localhost:8000'
 
   // ** Hooks
   const router = useRouter()
