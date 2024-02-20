@@ -17,7 +17,8 @@ const users: UserDataType[] = [
     password: 'admin',
     fullName: 'John Doe',
     username: 'johndoe',
-    email: 'admin@tria.com'
+    email: 'admin@tria.com',
+    clientId:'123'
   },
   {
     id: 2,
@@ -25,7 +26,8 @@ const users: UserDataType[] = [
     password: 'client',
     fullName: 'Jane Doe',
     username: 'janedoe',
-    email: 'client@vuexy.com'
+    email: 'client@vuexy.com',
+    clientId:'123'
   }
 ]
 
@@ -88,7 +90,8 @@ mock.onPost('/jwt/register').reply(request => {
         username,
         avatar: null,
         fullName: '',
-        role: 'admin'
+        role: 'admin',
+        clientId:'123'
       }
 
       users.push(userData)
