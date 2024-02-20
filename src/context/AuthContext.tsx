@@ -205,10 +205,10 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleSignUp = async (params: SignUpParams) => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/admin/initiate`
+      const apiUrl = `/auth/admin/initiate`
 
-      // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+       // Making the POST request using Axios
+       const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -223,10 +223,10 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleLogin = async (params: LoginParams) => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/admin/sign-in`
+      const apiUrl = `/auth/admin/sign-in`
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
       console.log('verified', response.data)
       const { token } = response.data
       if (!token) {
@@ -247,10 +247,10 @@ const AuthProvider = ({ children }: Props) => {
   }
   const resetPassword = async (params: ResetPasswordParams) => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/admin/reset-password`
+      const apiUrl = `/auth/admin/reset-password`
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response)
@@ -265,10 +265,10 @@ const AuthProvider = ({ children }: Props) => {
 
   const verifyOtp = async (params: verifyOtpParams) => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/admin/verify-otp`
+      const apiUrl = `/auth/admin/verify-otp`
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
       const { email, token, username } = response.data
       // Handling the response data
       console.log('Response Data:', response)
@@ -285,9 +285,13 @@ const AuthProvider = ({ children }: Props) => {
 
   const AdminOauth = async (params: AdminOauth) => {
     try {
-      const response = await axios.get(
-        `${baseURL}/api/v2/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
-      )
+      const apiUrl =`/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
+      // const response = await axios.get(
+      //   `${baseURL}/api/v2/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
+      // )
+
+           // Making the POST request using Axios
+      const response = await axiosInstance.get(apiUrl)
 
       const { id, username, token } = response.data
 
@@ -457,7 +461,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const saveProjectDetails = async (params: projectDetails) => {
     try {
-      const apiUrl='/auth/create-project';
+      const apiUrl='/analtyics/create-project';
 
       // Making the POST request using Axios
       const response = await axiosInstance.post(apiUrl, params)
@@ -472,7 +476,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const getProjectsData = async () => {
     try {
-      const apiUrl = `/auth/get-projects`;
+      const apiUrl = `/analtyics/get-projects`;
 
       // Making the POST request using Axios
       const response = await axiosInstance.get(apiUrl)
@@ -488,7 +492,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const deleteProject = async (projectId: string) => {
     try {
-      const apiUrl = `/auth/delete-project/${projectId}`
+      const apiUrl = `/analtyics/delete-project/${projectId}`
 
     // Making the POST request using Axios
     const response = await axiosInstance.delete(apiUrl);
