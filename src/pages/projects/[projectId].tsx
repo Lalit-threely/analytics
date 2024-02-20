@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import { projectData } from 'src/types/apps/projectTypes'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {} from '@mui/material'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
@@ -28,7 +28,22 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
 
+interface ProjectState {
+  projectId: string
+  apiKey: string
+  apiSecret: string
+  projectName: string
+}
+
+const initialState: ProjectState = {
+  projectId: '',
+  apiKey: '',
+  apiSecret: '',
+  projectName: ''
+}
+
 const projectDetails = () => {
+  const [projectState, setProjectState] = useState<ProjectState>(initialState)
   const auth = useAuth()
   const router = useRouter()
   const { projectData } = router.query
@@ -84,6 +99,26 @@ const projectDetails = () => {
     }
   }
 
+  const getProjectById = async () => {
+    try {
+      const response = await auth.getProjectById(project.projectId)
+      if (response.success === true) {
+        setProjectState({
+          projectId: response.data.projectId,
+          apiKey: response.data.apiKey,
+          apiSecret: response.data.apiSecret,
+          projectName: response.data.projectName
+        })
+      }
+    } catch (error) {
+      console.log('Error fetching project details:', error)
+    }
+  }
+
+  useEffect(() => {
+    getProjectById()
+  }, [projectState])
+
   const handleConfirmDelete = () => {
     deleteProject()
     handleCloseDialog()
@@ -133,7 +168,7 @@ const projectDetails = () => {
               Project Name
             </Typography>
             <Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-              {project.projectName}
+              {projectState.projectName}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '5rem', marginBottom: '1rem' }}>
@@ -143,11 +178,11 @@ const projectDetails = () => {
             <TextField
               variant='outlined'
               size='small'
-              value={project.projectId}
+              value={projectState.projectId}
               InputProps={{
                 readOnly: true,
                 endAdornment: (
-                  <IconButton onClick={() => copyValue(project.projectId)} size='small'>
+                  <IconButton onClick={() => copyValue(projectState.projectId)} size='small'>
                     <FileCopyIcon />
                   </IconButton>
                 )
@@ -162,11 +197,11 @@ const projectDetails = () => {
             <TextField
               variant='outlined'
               size='small'
-              value={project.apiKey}
+              value={projectState.apiKey}
               InputProps={{
                 readOnly: true,
                 endAdornment: (
-                  <IconButton onClick={() => copyValue(project.apiKey)} size='small'>
+                  <IconButton onClick={() => copyValue(projectState.apiKey)} size='small'>
                     <FileCopyIcon />
                   </IconButton>
                 )
@@ -181,11 +216,11 @@ const projectDetails = () => {
             <TextField
               variant='outlined'
               size='small'
-              value={project.apiSecret}
+              value={projectState.apiSecret}
               InputProps={{
                 readOnly: true,
                 endAdornment: (
-                  <IconButton onClick={() => copyValue(project.apiSecret)} size='small'>
+                  <IconButton onClick={() => copyValue(projectState.apiSecret)} size='small'>
                     <FileCopyIcon />
                   </IconButton>
                 )
@@ -213,7 +248,7 @@ const projectDetails = () => {
                 Project Name
               </Typography>
               <Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-                {project.projectName}
+                {projectState.projectName}
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '5rem', marginBottom: '1rem' }}>
@@ -221,7 +256,7 @@ const projectDetails = () => {
                 Project ID
               </Typography>
               <Typography variant='body1' sx={{ fontWeight: 'bold' }}>
-                {project.projectId}
+                {projectState.projectId}
               </Typography>
             </Box>
             <Divider sx={{ marginBottom: '1rem' }} />

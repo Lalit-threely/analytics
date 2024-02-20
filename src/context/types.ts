@@ -84,4 +84,5 @@ export type AuthValuesType = {
   saveProjectDetails: (params: projectDetails) => Promise<any>
   getProjectsData: (params: projectDetails) => Promise<any>
   deleteProject: (params: string) => Promise<any>
+  getProjectById: (params: string) => Promise<any>
 }

@@ -47,7 +47,8 @@ const defaultProvider: AuthValuesType = {
   getGroupedDataOfCharts: () => Promise.resolve(),
   saveProjectDetails: () => Promise.resolve(),
   getProjectsData: () => Promise.resolve(),
-  deleteProject: () => Promise.resolve()
+  deleteProject: () => Promise.resolve(),
+  getProjectById: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -62,11 +63,11 @@ const AuthProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
   const [clientId, setClientId] = useState<string>('5180b8cc-57d7-4472-9916-21ab42e67108')
-  const baseURL = 'https://staging.tria.so'
+  // const baseURL = 'https://staging.tria.so'
 
   // const [clientId, setClientId] = useState<string>('b48d8230-57f9-43fb-a952-722668bb3520')
   // const baseURL = 'https://prod.tria.so'
-  // const baseURL = 'http://localhost:8000'
+  const baseURL = 'http://localhost:8000'
 
   // ** Hooks
   const router = useRouter()
@@ -480,7 +481,7 @@ const AuthProvider = ({ children }: Props) => {
 
       return response.data
     } catch (error) {
-      console.error('Error making POST request:', error)
+      console.error('Error getting the projects data:', error)
       throw error
     }
   }
@@ -500,7 +501,27 @@ const AuthProvider = ({ children }: Props) => {
 
       return response.data
     } catch (error) {
-      console.error('Error making DELETE request:', error)
+      console.error('Error deleting the project:', error)
+      throw error
+    }
+  }
+
+  const getProjectById = async (projectId: string) => {
+    try {
+      const apiUrl = `${baseURL}/api/v2/auth/get-project/${projectId}`
+      const token = window.localStorage.getItem('accessToken')
+
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log('Response Data:', response.data)
+
+      return response.data
+    } catch (error) {
+      console.error('Error getting the project details:', error)
       throw error
     }
   }
@@ -526,7 +547,8 @@ const AuthProvider = ({ children }: Props) => {
     getGroupedDataOfCharts,
     saveProjectDetails,
     getProjectsData,
-    deleteProject
+    deleteProject,
+    getProjectById
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
