@@ -10,6 +10,9 @@ import axios from 'axios'
 // ** Config
 import authConfig from 'src/configs/auth'
 
+// **axios
+import axiosInstance from '../configs/axios'
+
 // ** Types
 import {
   AuthValuesType,
@@ -61,7 +64,7 @@ const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
-  const [clientId, setClientId] = useState<string>('5180b8cc-57d7-4472-9916-21ab42e67108')
+  const [clientId, setClientId] = useState<string | undefined>()
   const baseURL = 'https://staging.tria.so'
 
   // const [clientId, setClientId] = useState<string>('b48d8230-57f9-43fb-a952-722668bb3520')
@@ -173,12 +176,14 @@ const AuthProvider = ({ children }: Props) => {
 
   const storeToken = async (response: any) => {
     window.localStorage.setItem(authConfig.storageTokenKeyName, response.data?.token)
-    const { id, token, username, verified } = response.data
+    const { id, token, username, verified, clientId } = response.data
+    setClientId(clientId)
     setUser({
       role: 'admin',
       id: id,
       username: username,
-      password: ''
+      password: '',
+      clientId
     })
     window.localStorage.setItem(
       'userData',
@@ -186,7 +191,8 @@ const AuthProvider = ({ children }: Props) => {
         role: 'admin',
         id: id,
         username: username,
-        password: ''
+        password: '',
+        clientId
       })
     )
     // window.close();
@@ -341,15 +347,15 @@ const AuthProvider = ({ children }: Props) => {
   const getNewRegisteredUsers = async (params: newUserRegisters) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/getUserCountsInAPeriodController`
+      const apiUrl = `/analtyics/getUserCountsInAPeriodController`
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
 
-      // You can return the response data or perform other actions based on your requirements
+      // You can return the response data or perform other actions based on your equirements
       return response.data
     } catch (error) {
       // Handling errors
@@ -363,10 +369,11 @@ const AuthProvider = ({ children }: Props) => {
   const getUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/getUsers`
+      const apiUrl = `/analtyics/getUsers`
+
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -385,10 +392,10 @@ const AuthProvider = ({ children }: Props) => {
   const getActiveUsers = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/getActiveUsersCount`
-
+      const apiUrl = `/analtyics/getActiveUsersCount`
+   
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -407,10 +414,10 @@ const AuthProvider = ({ children }: Props) => {
   const getRegisteredOrVerifiedCount = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/getRegisteredOrVerifiedCount`
+      const apiUrl = `/analtyics/getRegisteredOrVerifiedCount`
 
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -429,10 +436,10 @@ const AuthProvider = ({ children }: Props) => {
   const getGroupedDataOfCharts = async (params: getUsers) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
-      const apiUrl = `${baseURL}/api/v2/analtyics/groupUsersByPlatform`
-
+      const apiUrl = `/analtyics/groupUsersByPlatform`
+  
       // Making the POST request using Axios
-      const response = await axios.post(apiUrl, params)
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -448,15 +455,13 @@ const AuthProvider = ({ children }: Props) => {
     }
   }
 
-  const saveProjectDetails = async (projectDetails: projectDetails) => {
+  const saveProjectDetails = async (params: projectDetails) => {
     try {
-      const token = window.localStorage.getItem('accessToken')
+      const apiUrl='/auth/create-project';
 
-      const response = await axios.post(`${baseURL}/api/v2/auth/create-project`, projectDetails, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      // Making the POST request using Axios
+      const response = await axiosInstance.post(apiUrl, params)
+      
       console.log('Project details saved:', response.data)
       return response.data
     } catch (error) {
@@ -467,14 +472,10 @@ const AuthProvider = ({ children }: Props) => {
 
   const getProjectsData = async () => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/get-projects`
-      const token = window.localStorage.getItem('accessToken')
+      const apiUrl = `/auth/get-projects`;
 
-      const response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      // Making the POST request using Axios
+      const response = await axiosInstance.get(apiUrl)
 
       console.log('Response Data:', response.data)
 
@@ -487,16 +488,12 @@ const AuthProvider = ({ children }: Props) => {
 
   const deleteProject = async (projectId: string) => {
     try {
-      const apiUrl = `${baseURL}/api/v2/auth/delete-project/${projectId}`
-      const token = window.localStorage.getItem('accessToken')
+      const apiUrl = `/auth/delete-project/${projectId}`
 
-      const response = await axios.delete(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    // Making the POST request using Axios
+    const response = await axiosInstance.delete(apiUrl);
 
-      console.log('Response Data:', response.data)
+    console.log('Response Data:', response.data)
 
       return response.data
     } catch (error) {

@@ -27,9 +27,6 @@ const AnalyticsOrderVisits: React.FC<AnalyticsOrderVisitsProps> = ({ refreshKey 
     try {
       const response = await auth.getNewRegisteredUsers({
         rangeType: filter,
-
-        // "fromClientId": "7db16867-55c4-4abf-90d9-0f523e29b7c3",
-        fromClientId: auth.clientId,
         resultCount: 2,
         verified: true
       })

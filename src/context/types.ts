@@ -35,12 +35,13 @@ export type UserDataType = {
   fullName?: string
   username: string
   password?: string
-  avatar?: string | null
+  avatar?: string | null,
+  clientId:string
 }
 
 export type newUserRegisters = {
   rangeType: string
-  fromClientId: string
+  // fromClientId: string
   from?: string
   to?: string
   resultCount?: number
@@ -49,7 +50,6 @@ export type newUserRegisters = {
 }
 
 export type getUsers = {
-  fromClientId: string
   from?: string
   to?: string
   resultCount?: number
@@ -66,7 +66,7 @@ export type AuthValuesType = {
   baseURL: string
   loading: boolean
   logout: () => void
-  clientId: string
+  clientId: string | undefined
   setClientId: (clientId: string) => void
   user: UserDataType | null
   setLoading: (value: boolean) => void

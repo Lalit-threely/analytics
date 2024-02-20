@@ -186,7 +186,6 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
 
     try {
       const response = await auth.getUsers({
-        fromClientId: auth.clientId,
         ...(startDate ? { from: startDate } : {}),
         ...(endDate ? { to: endDate } : {}),
         ...(verified ? { verified: verified } : {}),

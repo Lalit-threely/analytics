@@ -45,7 +45,6 @@ const AnalyticsDashboard = () => {
 
     try {
       const response = await auth.getRegisteredOrVerifiedCount({
-        fromClientId: auth.clientId
       })
       console.log('response', response)
       setUserData(response)
@@ -61,7 +60,6 @@ const AnalyticsDashboard = () => {
 
     try {
       const response = await auth.getGroupedDataOfCharts({
-        fromClientId: auth.clientId,
         verified: true
       })
       console.log('response charts', response)

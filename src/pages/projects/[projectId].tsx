@@ -162,11 +162,11 @@ const projectDetails = () => {
             <TextField
               variant='outlined'
               size='small'
-              value={project.apiKey}
+              value={project.clientId}
               InputProps={{
                 readOnly: true,
                 endAdornment: (
-                  <IconButton onClick={() => copyValue(project.apiKey)} size='small'>
+                  <IconButton onClick={() => copyValue(project.clientId)} size='small'>
                     <FileCopyIcon />
                   </IconButton>
                 )

@@ -98,7 +98,6 @@ const AnalyticsRegisteredUsersChart: React.FC<AnalyticsRegisteredUsersChartProps
     try {
       const response = await auth.getNewRegisteredUsers({
         rangeType: filter,
-        fromClientId: auth.clientId,
         resultCount: 7,
         verified: true
       })

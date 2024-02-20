@@ -130,7 +130,6 @@ const AnalyticsDroppedOffUsers = () => {
 
     try {
       const response = await auth.getUsers({
-        fromClientId: auth.clientId,
         verified: false,
         ...(searchValue ? { searchText: searchValue } : {})
       })

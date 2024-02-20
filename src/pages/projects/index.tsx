@@ -25,7 +25,6 @@ const AddProjects = () => {
 
     try {
       const data = await auth.getProjectsData({})
-      debugger
       setProjectData(data.response)
     } catch (error) {
       console.error('Error fetching data:', error)
