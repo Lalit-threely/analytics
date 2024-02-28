@@ -21,6 +21,8 @@ import Customizer from 'src/@core/components/customizer'
 import Navigation from './components/vertical/navigation'
 import Footer from './components/shared-components/footer'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
+import { Card, CardContent } from '@mui/material'
+import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -97,6 +99,9 @@ const VerticalLayout = (props: LayoutProps) => {
             appBarProps={verticalLayoutProps.appBar?.componentProps}
             {...props}
           /> */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', paddingTop: 3, marginRight: 3 }}>
+            <UserDropdown settings={settings} />
+          </Box>
 
           {/* Content */}
           <ContentWrapper

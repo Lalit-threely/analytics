@@ -207,8 +207,8 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const apiUrl = `/auth/admin/initiate`
 
-       // Making the POST request using Axios
-       const response = await axiosInstance.post(apiUrl, params)
+      // Making the POST request using Axios
+      const response = await axiosInstance.post(apiUrl, params)
 
       // Handling the response data
       console.log('Response Data:', response.data)
@@ -285,12 +285,12 @@ const AuthProvider = ({ children }: Props) => {
 
   const AdminOauth = async (params: AdminOauth) => {
     try {
-      const apiUrl =`/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
+      const apiUrl = `/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
       // const response = await axios.get(
       //   `${baseURL}/api/v2/auth/admin/google/callback?code=${params?.code}&scope=${params?.scope}`
       // )
 
-           // Making the POST request using Axios
+      // Making the POST request using Axios
       const response = await axiosInstance.get(apiUrl)
 
       const { id, username, token } = response.data
@@ -375,7 +375,6 @@ const AuthProvider = ({ children }: Props) => {
       // Replace 'API_URL' with your actual API endpoint
       const apiUrl = `/analtyics/getUsers`
 
-
       // Making the POST request using Axios
       const response = await axiosInstance.post(apiUrl, params)
 
@@ -397,7 +396,7 @@ const AuthProvider = ({ children }: Props) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
       const apiUrl = `/analtyics/getActiveUsersCount`
-   
+
       // Making the POST request using Axios
       const response = await axiosInstance.post(apiUrl, params)
 
@@ -441,7 +440,7 @@ const AuthProvider = ({ children }: Props) => {
     try {
       // Replace 'API_URL' with your actual API endpoint
       const apiUrl = `/analtyics/groupUsersByPlatform`
-  
+
       // Making the POST request using Axios
       const response = await axiosInstance.post(apiUrl, params)
 
@@ -461,11 +460,11 @@ const AuthProvider = ({ children }: Props) => {
 
   const saveProjectDetails = async (params: projectDetails) => {
     try {
-      const apiUrl='/analtyics/create-project';
+      const apiUrl = '/analtyics/create-project'
 
       // Making the POST request using Axios
       const response = await axiosInstance.post(apiUrl, params)
-      
+
       console.log('Project details saved:', response.data)
       return response.data
     } catch (error) {
@@ -476,7 +475,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const getProjectsData = async () => {
     try {
-      const apiUrl = `/analtyics/get-projects`;
+      const apiUrl = `/analtyics/get-projects`
 
       // Making the POST request using Axios
       const response = await axiosInstance.get(apiUrl)
@@ -494,10 +493,10 @@ const AuthProvider = ({ children }: Props) => {
     try {
       const apiUrl = `/analtyics/delete-project/${projectId}`
 
-    // Making the POST request using Axios
-    const response = await axiosInstance.delete(apiUrl);
+      // Making the POST request using Axios
+      const response = await axiosInstance.delete(apiUrl)
 
-    console.log('Response Data:', response.data)
+      console.log('Response Data:', response.data)
 
       return response.data
     } catch (error) {
