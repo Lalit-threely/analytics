@@ -231,12 +231,14 @@ const AnalyticsProject: React.FC<AnalyticsProjectProps> = ({ refreshKey }) => {
         ...(endDate ? { to: endDate } : {}),
         ...(verified ? { verified: verified } : {})
       })
-      const modifiedResponse = response.sort((a: any, b: any) => {
-        const dateA = new Date(a.createdAt || 0)
-        const dateB = new Date(b.createdAt || 0)
-        return dateB.getTime() - dateA.getTime()
-      })
-      return modifiedResponse
+      return response;
+      // debugger;
+      // const modifiedResponse = response.sort((a: any, b: any) => {
+      //   const dateA = new Date(a.createdAt || 0)
+      //   const dateB = new Date(b.createdAt || 0)
+      //   return dateB.getTime() - dateA.getTime()
+      // })
+      // return modifiedResponse
     } catch (error) {
       console.error('Error fetching data:', error)
     }
